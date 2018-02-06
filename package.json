@@ -1,0 +1,48 @@
+{
+  "name": "Inflatable-Dartboard",
+  "version": "0.1.0",
+  "devDependencies": {
+    "del": "^3.0.0",
+    "gulp": "^3.9.1",
+    "gulp-changed": "^3.1.0",
+    "gulp-if": "^2.0.2",
+    "gulp-sourcemaps": "^2.6.0",
+    "gulp-tape": "^0.0.9",
+    "gulp-typescript": "^3.2.0",
+    "gulp-uglify": "^3.0.0",
+    "gulp-util": "^3.0.8",
+    "merge2": "^1.1.0",
+    "typescript": "^2.4.1",
+    "uglify-js": "^3.0.20"
+  },
+  "dependencies": {
+    "@types/lodash": "^4.14.74",
+    "@types/pixi.js": "^4.5.3",
+    "@types/gsap": "^1.19.1",
+    "@types/howler": "^2.0.3"
+  },
+  "settings": {
+    "debug": true,
+    "tsconfig": {
+      "debug": "tsconfig.debug.json",
+      "release": "tsconfig.json"
+    },
+    "paths": {
+      "src": "./src/",
+      "srcScripts": "./src/scripts/",
+      "srcLibs": "./src/lib/",
+      "srcImages": "./src/images/",
+      "srcCss": "./src/css/",
+      "release": "build/release/",
+      "debug": "build/debug/",
+      "tgtScripts": "./",
+      "tgtImages": "images/",
+      "tgtLibs": "lib/",
+      "tgtCss": "css/",
+      "tests": "./tests/"
+    },
+    "main": "main.js",
+    "bundle": "bundle.js",
+    "port": 8080
+  }
+}

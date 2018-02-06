@@ -1,0 +1,17 @@
+{
+    "compilerOptions": {
+        "target": "es5",
+        "module": "amd",
+        "removeComments": true,
+        "sourceMap": true,
+        "watch": false,
+        "declaration" : true,
+        "outFile": "./usPixiApp.js"
+    },
+    "filesGlob": [
+        "src/**/*.ts"
+    ],
+    "exclude": [
+        "node_modules"
+    ]
+}
