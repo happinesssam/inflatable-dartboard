@@ -1,5 +1,5 @@
-namespace utterlySuperb.pixiApp.app{
-    import AppSettings = utterlySuperb.pixiApp.app.model.AppSettings;
+namespace utterlySuperb.inflatableDartboard.app{
+    import AppSettings = utterlySuperb.inflatableDartboard.app.model.AppSettings;
     import Container = PIXI.Container;
     export class PixiManager{
         private static _instance:PixiManager;

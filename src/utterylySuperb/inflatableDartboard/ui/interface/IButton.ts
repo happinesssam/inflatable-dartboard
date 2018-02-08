@@ -1,4 +1,4 @@
-namespace utterlySuperb.pixiApp.ui.interfaces{
+namespace utterlySuperb.inflatableDartboard.ui.interfaces{
     export interface IButton extends IUIComponent{
         enable():void;
         disable(showDisabled:boolean):void;

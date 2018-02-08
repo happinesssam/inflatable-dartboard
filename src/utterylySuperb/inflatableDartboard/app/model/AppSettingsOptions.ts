@@ -1,4 +1,4 @@
-namespace utterlySuperb.pixiApp.app.model{
+namespace utterlySuperb.inflatableDartboard.app.model{
     export interface AppSettingsOptions{
         renderWidth:number;
         renderHeight:number;

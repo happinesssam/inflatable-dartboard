@@ -1,10 +1,10 @@
-///<reference path="..\..\..\..\definitions\pixi.js.d.ts"/>
+///<reference path="..\..\..\..\node_modules\@types\pixi.js\index.d.ts"/>
 ///<reference path="model\AppSettings.ts"/>
 
-namespace utterlySuperb.pixiApp.app{
+namespace utterlySuperb.inflatableDartboard.app{
     import Loader = PIXI.loaders.Loader;
-    import AppSettings = utterlySuperb.pixiApp.app.model.AppSettings;
-    import AppSettingsOptions = utterlySuperb.pixiApp.app.model.AppSettingsOptions;
+    import AppSettings = utterlySuperb.inflatableDartboard.app.model.AppSettings;
+    import AppSettingsOptions = utterlySuperb.inflatableDartboard.app.model.AppSettingsOptions;
     export class App{
         private settings:AppSettings;
 

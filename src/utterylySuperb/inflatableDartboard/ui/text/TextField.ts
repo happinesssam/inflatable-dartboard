@@ -1,4 +1,4 @@
-namespace utterlySuperb.pixiApp.ui.text{
+namespace utterlySuperb.inflatableDartboard.ui.text{
     import Container = PIXI.Container;
     import TextStyle = PIXI.TextStyle;
     import Text = PIXI.Text;
@@ -25,6 +25,11 @@ namespace utterlySuperb.pixiApp.ui.text{
 
         public get text():string{
             return this.textField.text;
+        }
+
+        public setStyle(style:TextStyle):void{
+            this.textField.style = style;
+            this.placeText();
         }
 
         private placeText():void{
