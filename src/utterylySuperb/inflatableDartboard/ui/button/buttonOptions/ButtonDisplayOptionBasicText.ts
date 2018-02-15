@@ -1,10 +1,10 @@
 namespace utterlySuperb.inflatableDartboard.ui.button{
     export interface ButtonOptionsBasicText extends ButtonDisplayOptions{
-        upTextStyle:PIXI.TextStyle;
-        overTextStyle?:PIXI.TextStyle;
-        downTextStyle?:PIXI.TextStyle;
-        disableTextStyle?:PIXI.TextStyle;
-        selectedTextStyle?:PIXI.TextStyle;
+        upTextStyle:PIXI.TextStyleOptions;
+        overTextStyle?:PIXI.TextStyleOptions;
+        downTextStyle?:PIXI.TextStyleOptions;
+        disableTextStyle?:PIXI.TextStyleOptions;
+        selectedTextStyle?:PIXI.TextStyleOptions;
         width?:number;
         height?:number;
         offsetX?:number;

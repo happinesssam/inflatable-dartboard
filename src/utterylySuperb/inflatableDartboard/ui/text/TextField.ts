@@ -1,6 +1,7 @@
 namespace utterlySuperb.inflatableDartboard.ui.text{
     import Container = PIXI.Container;
     import TextStyle = PIXI.TextStyle;
+    import TextStyleOptions = PIXI.TextStyleOptions;
     import Text = PIXI.Text;
     export class TextField extends Container{
         public textField:Text;
@@ -29,6 +30,15 @@ namespace utterlySuperb.inflatableDartboard.ui.text{
 
         public setStyle(style:TextStyle):void{
             this.textField.style = style;
+            this.placeText();
+        }      
+        
+        public get textStyle():TextStyle{
+            return this.textField.style;
+        }
+
+        public setStyleOptions(style:TextStyleOptions):void{
+            this.textField.style = new TextStyle(style);
             this.placeText();
         }
 

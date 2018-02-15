@@ -10,9 +10,14 @@ namespace utterlySuperb.inflatableDartboard.ui.button{
         protected selectedGraphic?:Sprite;
         protected selectedOverGraphic?:Sprite;
         protected selectedDownGraphic?:Sprite;
+        protected displayerOptions:ButtonDisplayOptions;
+
+        //I guess there is a better way of doing this?
+        public static DISPLAY_ID:string = "utterlySuperb.inflatableDartboard.ui.button.ButtonGraphicSwapper";
 
         public init(button:Button, displayerOptions:ButtonDisplayOptions):void{
             this.makeSprites(button, displayerOptions as ButtonDisplayOptionsGraphicsSwapper);
+            this.displayerOptions = displayerOptions;
         }
 
         protected makeSprites(button:Button, displayerOptions:ButtonDisplayOptionsGraphicsSwapper):void{
@@ -40,35 +45,61 @@ namespace utterlySuperb.inflatableDartboard.ui.button{
             return sprite;
         }
 
-        public  displayUp(button:Button):void{
+        public setState(button:Button, state:ButtonState):void{
+            switch(state){
+                case ButtonState.up:
+                this.displayUp(button);
+                break;
+                case ButtonState.over:
+                this.displayOver(button);
+                break;
+                case ButtonState.down:
+                this.displayDown(button);
+                break;
+                case ButtonState.selected:
+                this.displaySelected(button);
+                break;
+                case ButtonState.disabled:
+                this.displayDisabled(button);
+                break;
+                case ButtonState.selectedOver:
+                this.displaySelectedOver(button);
+                break;
+                case ButtonState.selectedDown:
+                this.displaySelectedDown(button);
+                break;
+            }
+        }
+
+        protected displayUp(button:Button):void{
             this.switchGraphic(button, this.upGraphic);
         }
         
-        public  displayOver(button:Button):void{
+        protected displayOver(button:Button):void{
             if(this.overGraphic){
                 this.switchGraphic(button, this.overGraphic);
             }
         }
 
-        public  displayDown(button:Button):void{
+        protected displayDown(button:Button):void{
             if(this.downGraphic){
                 this.switchGraphic(button, this.downGraphic);
             }
         }
 
-        public  displayDisabled(button:Button):void{
+        protected displayDisabled(button:Button):void{
             if(this.disableGraphic){
                 this.switchGraphic(button, this.disableGraphic);
             }
         }
 
-        public  displaySelected(button:Button):void{
+        protected displaySelected(button:Button):void{
             if(this.selectedGraphic){
                 this.switchGraphic(button, this.selectedGraphic);
             }
         }
         
-        public  displaySelectedOver(button:Button):void{
+        protected displaySelectedOver(button:Button):void{
             if(this.selectedOverGraphic){
                 this.switchGraphic(button, this.selectedOverGraphic);
             }else if(this.selectedGraphic){
@@ -76,7 +107,7 @@ namespace utterlySuperb.inflatableDartboard.ui.button{
             }  
         }
         
-        public displaySelectedDown(button:Button):void{
+        protected displaySelectedDown(button:Button):void{
             if(this.selectedDownGraphic){
                 this.switchGraphic(button, this.selectedDownGraphic);
             }else if(this.selectedGraphic){
@@ -89,7 +120,7 @@ namespace utterlySuperb.inflatableDartboard.ui.button{
             button.graphicHolder.addChild(newGraphic);
         }
 
-        public  setText(newText:string, button:Button):void{
+        public setText(newText:string, button:Button, displayId?:string):void{
             
         }
     }

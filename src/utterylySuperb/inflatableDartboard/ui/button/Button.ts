@@ -91,9 +91,9 @@ namespace utterlySuperb.inflatableDartboard.ui.button{
             return this._enabled;
         }
 
-        public setText(newText:string):void{
+        public setText(newText:string, displayId?:string):void{
             _.forEach(this.displayers, (displayer:IButtonDisplay)=>{
-                displayer.setText(newText, this);
+                displayer.setText(newText, this, displayId);
             });
         }
 
@@ -137,7 +137,7 @@ namespace utterlySuperb.inflatableDartboard.ui.button{
                 this.displaySelected();
             }else{
                 _.forEach(this.displayers, (displayer:IButtonDisplay)=>{
-                    displayer.displayUp(this);
+                    displayer.setState(this, ButtonState.up);
                 });
             }
         }
@@ -145,11 +145,11 @@ namespace utterlySuperb.inflatableDartboard.ui.button{
         protected displayOver():void{
             if(this.selected){
                 _.forEach(this.displayers, (displayer:IButtonDisplay)=>{
-                    displayer.displaySelectedOver(this);
+                    displayer.setState(this, ButtonState.selectedOver);
                 });
             }else{
                 _.forEach(this.displayers, (displayer:IButtonDisplay)=>{
-                    displayer.displayOver(this);
+                    displayer.setState(this, ButtonState.over);
                 });
             }
         }
@@ -157,25 +157,34 @@ namespace utterlySuperb.inflatableDartboard.ui.button{
         protected displayDown():void{
             if(this.selected){
                 _.forEach(this.displayers, (displayer:IButtonDisplay)=>{
-                    displayer.displaySelectedDown(this);
+                    displayer.setState(this, ButtonState.selectedDown);
                 });
             }else{
                 _.forEach(this.displayers, (displayer:IButtonDisplay)=>{
-                    displayer.displayDown(this);
+                    displayer.setState(this, ButtonState.down);
                 });
             }
         }
 
         protected displayDisabled():void{
             _.forEach(this.displayers, (displayer:IButtonDisplay)=>{
-                displayer.displayDisabled(this);
+                displayer.setState(this, ButtonState.disabled);
             });
         }
 
         protected displaySelected():void{
             _.forEach(this.displayers, (displayer:IButtonDisplay)=>{
-                displayer.displaySelected(this);
+                displayer.setState(this, ButtonState.selected);
             });
         }
+    }
+    export enum ButtonState{
+        up,
+        over,
+        down,
+        disabled,
+        selected,
+        selectedOver,
+        selectedDown
     }
 }
