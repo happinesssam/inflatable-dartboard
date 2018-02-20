@@ -67,9 +67,9 @@ gulp.src(settings.paths.src + "*.html")
     .pipe(changed(dest))
     .pipe(gulp.dest(dest));
 
-gulp.src(settings.paths.srcImages + "**")
+gulp.src(settings.paths.srcAssets + "**")
     .pipe(changed(dest))
-    .pipe(gulp.dest(dest + settings.paths.tgtImages));
+    .pipe(gulp.dest(dest + settings.paths.tgtAssets));
 
 gulp.src(settings.paths.srcCss + "**")
     .pipe(changed(dest))

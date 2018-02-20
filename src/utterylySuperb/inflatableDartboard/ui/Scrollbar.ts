@@ -2,6 +2,7 @@ namespace utterlySuperb.inflatableDartboard.ui{
     import Container = PIXI.Container;
     import Sprite = PIXI.Sprite;
     import ScrollbarConfig = utterlySuperb.inflatableDartboard.ui.interfaces.ScrollbarConfig;
+    import Button = utterlySuperb.inflatableDartboard.ui.button.Button;
     export class Scrollbar extends Container{
         private upButton:Button;
         private downButton:Button;

@@ -12,15 +12,15 @@
     "gulp-uglify": "^3.0.0",
     "gulp-util": "^3.0.8",
     "merge2": "^1.1.0",
-    "typescript": "^2.4.1",
-    "uglify-js": "^3.0.20"
+    "typescript": "^2.7.2",
+    "uglify-js": "^3.3.11"
   },
   "dependencies": {
     "@types/gsap": "^1.19.1",
     "@types/howler": "^2.0.3",
-    "@types/lodash": "^4.14.102",
-    "@types/pixi.js": "^4.5.3",
-    "@types/signals": "^0"
+    "@types/lodash": "^4.14.104",
+    "@types/pixi.js": "^4.7.1",
+    "@types/webfontloader": "^1.6.29"
   },
   "settings": {
     "debug": true,
@@ -33,17 +33,16 @@
       "srcScripts": "./src/scripts/",
       "srcLibs": "./src/lib/",
       "srcImages": "./src/images/",
+      "srcAssets": "./src/assets/",
       "srcCss": "./src/css/",
       "release": "build/release/",
       "debug": "build/debug/",
       "tgtScripts": "./",
       "tgtImages": "images/",
+      "tgtAssets": "assets/",
       "tgtLibs": "lib/",
       "tgtCss": "css/",
       "tests": "./tests/"
-    },
-    "main": "main.js",
-    "bundle": "bundle.js",
-    "port": 8080
+    }
   }
 }

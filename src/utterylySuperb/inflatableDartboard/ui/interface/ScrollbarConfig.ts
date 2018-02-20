@@ -1,6 +1,6 @@
-///<reference path="../Button.ts"/>
+///<reference path="../button/buttonOptions/ButtonConfigOptions.ts"/>
 namespace utterlySuperb.inflatableDartboard.ui.interfaces{
-    import ButtonConfigOptions = utterlySuperb.inflatableDartboard.ui.interfaces.ButtonConfigOptions;
+    import ButtonConfigOptions = utterlySuperb.inflatableDartboard.ui.button.ButtonConfigOptions;
     import Texture = PIXI.Texture;
     export interface ScrollbarConfig{
         upButton?:ButtonConfigOptions;

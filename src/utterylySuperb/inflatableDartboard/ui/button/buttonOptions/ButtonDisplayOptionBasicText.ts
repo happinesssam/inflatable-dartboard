@@ -1,4 +1,5 @@
 namespace utterlySuperb.inflatableDartboard.ui.button{
+    import Point = PIXI.Point;
     export interface ButtonOptionsBasicText extends ButtonDisplayOptions{
         upTextStyle:PIXI.TextStyleOptions;
         overTextStyle?:PIXI.TextStyleOptions;
@@ -9,6 +10,7 @@ namespace utterlySuperb.inflatableDartboard.ui.button{
         height?:number;
         offsetX?:number;
         offsetY?:number;
+        downOffset?:Point;
         align?:string;
     }
 }

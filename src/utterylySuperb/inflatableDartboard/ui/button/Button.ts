@@ -1,6 +1,5 @@
 ///<reference path="..\text\TextField.ts"/>
 ///<reference path="..\..\utils\FunctionUtils.ts"/>
-///<reference path="..\..\..\..\..\node_modules\@types\signals\index.d.ts"/>
 namespace utterlySuperb.inflatableDartboard.ui.button{
     import Container = PIXI.Container;
     import Sprite = PIXI.Sprite;
@@ -43,6 +42,7 @@ namespace utterlySuperb.inflatableDartboard.ui.button{
             if(this.hitAreaGraphic){
                 this.clickArea = this.hitAreaGraphic;
                 this.addChild(this.clickArea);
+                this.clickArea.alpha = 0;
             }else{
                 this.clickArea = this.graphicHolder;
             }
