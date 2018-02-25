@@ -9,10 +9,14 @@ namespace utterlySuperb.inflatableDartboard.ui.text{
         private boxHeight:number;
         private align:string;
 
-        constructor(width:number, height:number, align:string="c", style:TextStyle=null, copy:string=""){
+        constructor(width:number, height:number, align:string="c", styleOptions:TextStyleOptions | string=null, copy:string=""){
             super();
             this.boxWidth = width;
             this.boxHeight = height;
+            if(typeof styleOptions=="string"){
+                styleOptions = TextHelper.getInstance().getTextOptions(styleOptions);
+            }
+            let style:TextStyle = new TextStyle(styleOptions);
             this.textField = new Text(copy, style);
             this.addChild(this.textField);
             this.align = align.toLowerCase();

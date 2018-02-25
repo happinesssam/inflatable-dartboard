@@ -1,4 +1,5 @@
 ///<reference path="..\text\TextField.ts"/>
+///<reference path="..\text\TextHelper.ts"/>
 ///<reference path="..\..\utils\FunctionUtils.ts"/>
 namespace utterlySuperb.inflatableDartboard.ui.button{
     import Container = PIXI.Container;

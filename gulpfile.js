@@ -8,6 +8,7 @@ const sourcemaps = require("gulp-sourcemaps");
 const ts = require("gulp-typescript");
 const merge = require("merge2");
 const del = require("del");
+const server = require('gulp-webserver');
 
 const debug = settings.debug === true;
 
@@ -80,4 +81,13 @@ gulp.src(settings.paths.srcLibs + "**")
     .pipe(gulp.dest(dest + settings.paths.tgtLibs));
 });
 
-gulp.task("default", ["compile", "copy"]);
+gulp.task('server', function() {
+    let folder = debug ? "build/debug" : "build/release";
+    gulp.src(folder)	// <-- your app folder
+      .pipe(server({
+        livereload: true,
+        open: true
+      }));
+  });
+
+gulp.task("default", ["compile", "copy", 'server']);

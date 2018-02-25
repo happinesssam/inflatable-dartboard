@@ -11,6 +11,7 @@
     "gulp-typescript": "^3.2.0",
     "gulp-uglify": "^3.0.0",
     "gulp-util": "^3.0.8",
+    "gulp-webserver": "^0.9.1",
     "merge2": "^1.1.0",
     "typescript": "^2.7.2",
     "uglify-js": "^3.3.11"

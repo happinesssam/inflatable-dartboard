@@ -1,4 +1,4 @@
 @font-face {
-    font-family: 'kenney';
-    src: '../assets/fonts/kenvector_future.ttf';
+    font-family: 'KenVector Future';
+    src: url('../assets/fonts/kenvector_future.ttf');
 }

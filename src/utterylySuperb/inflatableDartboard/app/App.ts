@@ -16,7 +16,6 @@ namespace utterlySuperb.inflatableDartboard.app{
         private initPixi():void{
             let pixiManager:PixiManager = PixiManager.getInstance();
             pixiManager.initPixi(this.settings);
-            console.log("pixiManager", pixiManager);
         }
     }
 }

@@ -7,6 +7,8 @@ namespace utterlySuperb.inflatableDartboard.app.utils{
         public fontCss:string= "css/fonts.css";
         public loadedSignal:Signal;
         public progressSignal:Signal;
+        public imagesWeight:number = 1;
+        public soundsWeight:number = 1;
 
         public static getInstance():AppLoader{
             if(!AppLoader._instance)AppLoader._instance = new AppLoader();
@@ -20,27 +22,48 @@ namespace utterlySuperb.inflatableDartboard.app.utils{
         }
 
         public addAsset(path:string, reference:string, type:AssetType, path2?:string):void{
-
+            this.assetsToLoad.push({path:path, reference:reference, type:type, path2:path2})
         }
 
         public startLoad():void{
-            this.loadFonts();
+            this.loadPixiAssets();
         }
 
         private loadPixiAssets():void{
-
+            let imagesToLoad:AssetToLoad[] = _.filter(this.assetsToLoad, {type:AssetType.image || AssetType.spritesheet});
+            if(imagesToLoad.length){
+                let loader:Loader = new Loader();
+                _.forEach(imagesToLoad, (imageToLoad:AssetToLoad)=>{
+                    loader.add(imageToLoad.reference, imageToLoad.path);
+                });
+                loader.onComplete.add(this.pixiAssetsLoaded.bind(this));
+                loader.onProgress.add(this.pixiAssetsProgress.bind(this));
+                loader.load();
+            }else{
+                this.loadSounds();
+            }
+        }
+        
+        private pixiAssetsProgress(e):void{
+console.log("pixiAssetsProgress", e)
         }
 
         private pixiAssetsLoaded():void{
-
+            this.loadSounds();
         }
 
         private loadSounds():void{
+            let soundsToLoad:AssetToLoad[] = _.filter(this.assetsToLoad, {type:AssetType.sound});
+            let audioSpritesToLoad:AssetToLoad[] = _.filter(this.assetsToLoad, {type:AssetType.audioSprite});
+            if(soundsToLoad.length || audioSpritesToLoad.length){
 
+            }else{
+                this.soundsLoaded();
+            }
         }
 
         private soundsLoaded():void{
-
+            this.loadFonts();
         }
 
         private loadFonts():void{
@@ -58,13 +81,14 @@ namespace utterlySuperb.inflatableDartboard.app.utils{
                         fontConfig.custom.urls.push(fontToLoad.path);
                     }
                 });
+                WebFont.load(fontConfig);
             }else{
                 this.fontsLoaded();
             }           
         }
 
-        private fontsError(e):void{
-            console.error("Font load error:" + e.toString());
+        private fontsError():void{
+            console.error("Font load error:");
         }
 
         private fontsLoaded():void{
@@ -76,6 +100,7 @@ namespace utterlySuperb.inflatableDartboard.app.utils{
         path:string;
         type:AssetType;
         reference:string;
+        path2:string;
     }
 
     export enum AssetType{

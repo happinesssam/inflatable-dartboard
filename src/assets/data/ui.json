@@ -1,0 +1,27 @@
+{
+    "buttons":[
+        {
+            "id":"button0",
+            "displayers":[
+                {
+                    "class":"utterlySuperb.inflatableDartboard.ui.button.ButtonOptionsBasicText",
+                    "upTextStyle":"buttonText0",
+                    "overTextStyle":"buttonText0Over"
+                }
+            ]
+        }
+    ],
+    "textStyles":[
+        {
+            "id":"buttonText0",
+            "fontFamily":"KenVector Future",
+            "fontSize":14,
+            "fill":"#CCCCCC"
+        },{
+            "id":"buttonText0Over",
+            "fontFamily":"KenVector Future",
+            "fontSize":14,
+            "fill":"#FFFFFF"
+        }
+    ]
+}

@@ -1,5 +1,6 @@
 namespace utterlySuperb.inflatableDartboard.ui.button{
     import TextField = utterlySuperb.inflatableDartboard.ui.text.TextField;
+    import TextHelper = utterlySuperb.inflatableDartboard.ui.text.TextHelper;
     import TextStyle = PIXI.TextStyle;
     import TextStyleOptions = PIXI.TextStyleOptions;
     export class ButtonTextDisplayer implements IButtonDisplay{
@@ -39,7 +40,7 @@ namespace utterlySuperb.inflatableDartboard.ui.button{
             if(!_.isNaN(displayerOptions.height))textHeight = displayerOptions.height;
             if(displayerOptions.align)textAlign = button.config.align;
             this.textField = new TextField(textWidth, textHeight, textAlign, 
-                this.upTextStyle, "");
+                displayerOptions.upTextStyle, "");
             button.textHolder.addChild(this.textField);
             if(!_.isNaN(displayerOptions.offsetX)){
                 this.textField.x = displayerOptions.offsetX;
@@ -49,8 +50,11 @@ namespace utterlySuperb.inflatableDartboard.ui.button{
             }
         }
 
-        protected getStyle(textOptions:TextStyleOptions):TextStyle{
+        protected getStyle(textOptions:TextStyleOptions | string):TextStyle{
             if(textOptions){
+                if(typeof textOptions=="string"){
+                    textOptions = TextHelper.getInstance().getTextOptions(textOptions);
+                }
                 let textStyle:TextStyle = new TextStyle(textOptions);
                 this.textStyles.push(textStyle);
                 return textStyle;
