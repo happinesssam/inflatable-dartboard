@@ -6,9 +6,12 @@ namespace utterlySuperb.inflatableDartboard.app.model{
         public appHeight:number = 600;
         public antialias:boolean = true;
         public containerId:string;
+        public configPath:string;
 
         constructor(options:AppSettingsOptions){
-
+            for(var i in options){
+                this[i] = options[i];
+            }
         }
     }
 }

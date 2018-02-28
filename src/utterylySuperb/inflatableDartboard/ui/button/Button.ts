@@ -57,16 +57,22 @@ namespace utterlySuperb.inflatableDartboard.ui.button{
             this.displayers = [];
 
             if(config.displayers){
-                _.forEach(config.displayers, (displayerClass:string | ButtonDisplayOptions)=>{
-                    let classOb:any = FunctionUtils.stringToFunction("my.namespaced.MyClass");
-                    let displayerConfig:ButtonDisplayOptions = null;
-                    if(typeof displayerClass == "string"){
-                        classOb = FunctionUtils.stringToFunction(displayerClass);
-                    }else{
-                        classOb = FunctionUtils.stringToFunction(displayerClass.displayer);
-                        displayerConfig = displayerClass;
-                    }
+                _.forEach(config.displayers, (displayerId:string)=>{
+                    let classOb:any;
+                    let displayerConfig:ButtonDisplayOptions = ButtonHelper.getInstance().getDisplayer(displayerId);
 
+                    switch(displayerConfig.class){
+                        case ButtonTextDisplayer.DISPLAY_ID:
+                        classOb = ButtonTextDisplayer;
+                        break;
+                        case ButtonGraphicSwapper.DISPLAY_ID:
+                        classOb = ButtonGraphicSwapper;
+                        break;
+                        default:
+                        classOb = FunctionUtils.stringToFunction(displayerConfig.class);
+                    }
+                    
+ 
                     let displayer:IButtonDisplay = new classOb(this) as IButtonDisplay;
                     displayer.init(this, displayerConfig);
                     displayer.setText(copy, this);

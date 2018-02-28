@@ -1,0 +1,11 @@
+{
+    "uiFiles":[
+        "assets/data/ui.json"
+    ],
+    "images":[
+        "assets/data/images.json"
+    ],
+    "fonts":[
+        {"path":"css/fonts.css", "id":"KenVector Future"}
+    ]
+}

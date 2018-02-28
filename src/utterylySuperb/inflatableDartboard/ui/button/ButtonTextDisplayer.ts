@@ -13,7 +13,7 @@ namespace utterlySuperb.inflatableDartboard.ui.button{
         private textStyles:TextStyle[];
         protected displayerOptions:ButtonOptionsBasicText;
 
-        public static DISPLAY_ID:string = "utterlySuperb.inflatableDartboard.ui.button.ButtonTextDisplayer";
+        public static DISPLAY_ID:string = "TextDisplayer";
 
         public init(button:Button, displayerOptions:ButtonDisplayOptions):void{
             this.displayerOptions = displayerOptions as ButtonOptionsBasicText;
@@ -130,7 +130,7 @@ namespace utterlySuperb.inflatableDartboard.ui.button{
             }
         }
         public  setText(newText:string, button:Button, displayId?:string):void{
-            if(displayId && this.displayerOptions.displayer!=displayId){
+            if(displayId && this.displayerOptions.class!=displayId){
                 return;
             }
             this.textField.text = newText;

@@ -19,5 +19,9 @@ namespace utterlySuperb.inflatableDartboard.ui.text{
         public addTextOption(optionId:string, option:TextStyleOptions):void{
             this.options[optionId] = option;
         }
+
+        public addTextObject(textObject:any):void{
+            this.options[textObject.id] = textObject;
+        }
     }
 }

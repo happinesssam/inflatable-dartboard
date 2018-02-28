@@ -9,6 +9,8 @@ namespace utterlySuperb.inflatableDartboard.app.utils{
         public progressSignal:Signal;
         public imagesWeight:number = 1;
         public soundsWeight:number = 1;
+        private configLoaded:boolean;
+        private assetsAdded:boolean;
 
         public static getInstance():AppLoader{
             if(!AppLoader._instance)AppLoader._instance = new AppLoader();
@@ -26,15 +28,30 @@ namespace utterlySuperb.inflatableDartboard.app.utils{
         }
 
         public startLoad():void{
-            this.loadPixiAssets();
+            this.assetsAdded = true;
+            this.checkBeginLoad();
+        }
+
+        public configHasLoaded():void{
+            this.configLoaded = true;
+            this.checkBeginLoad();
+        }
+
+        private checkBeginLoad():void{
+            if(this.assetsAdded && this.configLoaded){
+                this.loadPixiAssets();
+            }
         }
 
         private loadPixiAssets():void{
-            let imagesToLoad:AssetToLoad[] = _.filter(this.assetsToLoad, {type:AssetType.image || AssetType.spritesheet});
+            let imagesToLoad:AssetToLoad[] = _.filter(this.assetsToLoad, {type:AssetType.image });
             if(imagesToLoad.length){
                 let loader:Loader = new Loader();
                 _.forEach(imagesToLoad, (imageToLoad:AssetToLoad)=>{
                     loader.add(imageToLoad.reference, imageToLoad.path);
+                    if(imageToLoad.type==AssetType.image){
+                        TextureHelper.getInstance().setAsset(imageToLoad.reference, imageToLoad.path);
+                    }
                 });
                 loader.onComplete.add(this.pixiAssetsLoaded.bind(this));
                 loader.onProgress.add(this.pixiAssetsProgress.bind(this));

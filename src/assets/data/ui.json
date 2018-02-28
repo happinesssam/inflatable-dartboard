@@ -2,13 +2,27 @@
     "buttons":[
         {
             "id":"button0",
+            "width":300,
+            "height":200,
             "displayers":[
-                {
-                    "class":"utterlySuperb.inflatableDartboard.ui.button.ButtonOptionsBasicText",
-                    "upTextStyle":"buttonText0",
-                    "overTextStyle":"buttonText0Over"
-                }
+                "button0Text",
+                "button0Graphics"
             ]
+        }
+    ],
+    "buttonDisplayers":[
+        {
+            "id":"button0Graphics",
+            "class":"GraphicSwapper",
+            "upGraphic":"button0Up",
+            "overGraphic":"button0Over",
+            "downGraphic":"button0Down"
+        },
+        {
+            "id":"button0Text",
+            "class":"TextDisplayer",
+            "upTextStyle":"buttonText0",
+            "overTextStyle":"buttonText0Over"
         }
     ],
     "textStyles":[

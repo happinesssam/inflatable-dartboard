@@ -1,6 +1,8 @@
+///<reference path="..\..\app\utils\TextureHelper.ts"/>
 namespace utterlySuperb.inflatableDartboard.ui.button{
     import Sprite = PIXI.Sprite;
     import Texture = PIXI.Texture;
+    import TextureHelper = utterlySuperb.inflatableDartboard.app.utils.TextureHelper;
     export class ButtonGraphicSwapper implements IButtonDisplay{
 
         protected upGraphic:Sprite;
@@ -13,7 +15,7 @@ namespace utterlySuperb.inflatableDartboard.ui.button{
         protected displayerOptions:ButtonDisplayOptions;
 
         //I guess there is a better way of doing this?
-        public static DISPLAY_ID:string = "utterlySuperb.inflatableDartboard.ui.button.ButtonGraphicSwapper";
+        public static DISPLAY_ID:string = "GraphicSwapper";
 
         public init(button:Button, displayerOptions:ButtonDisplayOptions):void{
             this.makeSprites(button, displayerOptions as ButtonDisplayOptionsGraphicsSwapper);
@@ -31,10 +33,10 @@ namespace utterlySuperb.inflatableDartboard.ui.button{
             this.selectedDownGraphic = this.createSprite(displayerOptions.selectedDownGraphic, button.config);
         }
 
-        private createSprite(texture:Texture, config:ButtonConfigOptions):Sprite{
+        private createSprite(texture:string, config:ButtonConfigOptions):Sprite{
             let sprite:Sprite = null;
             if(texture){
-                sprite = new Sprite(texture);
+                sprite = Sprite.from(TextureHelper.getInstance().getAssetURl(texture));
                 if(!_.isNaN(config.width)){
                     sprite.width = config.width;
                 }

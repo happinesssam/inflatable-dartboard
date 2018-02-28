@@ -4,16 +4,16 @@ namespace utterlySuperb.inflatableDartboard.test{
     import AppLoader = utterlySuperb.inflatableDartboard.app.utils.AppLoader;
     import AssetType = utterlySuperb.inflatableDartboard.app.utils.AssetType;
     import TextField = utterlySuperb.inflatableDartboard.ui.text.TextField;
+    import Button = utterlySuperb.inflatableDartboard.ui.button.Button;
+    import ButtonHelper = utterlySuperb.inflatableDartboard.ui.button.ButtonHelper;
     import PixiManager = utterlySuperb.inflatableDartboard.app.PixiManager;
     import Sprite = PIXI.Sprite;
     export class TestApp{
         constructor(){
-            let app:App = new App({renderWidth:800, renderHeight:600, containerId:"game"});
+            let app:App = new App({renderWidth:800, renderHeight:600, containerId:"game"
+            , configPath:"assets/data/config.json"});
 
             let appLoader:AppLoader = AppLoader.getInstance();
-
-            appLoader.addAsset("css/fonts.css", "KenVector Future", AssetType.font);
-            appLoader.addAsset("assets/images/ui/blue_button00.png", "KenVector Future", AssetType.image);
 
             appLoader.loadedSignal.add(this.assetsLoaded.bind(this));
 
@@ -26,6 +26,12 @@ namespace utterlySuperb.inflatableDartboard.test{
 
             let s:Sprite = Sprite.fromImage("assets/images/ui/blue_button00.png");
             PixiManager.getInstance().stage.addChild(s);
+
+            let button:Button = ButtonHelper.getInstance().getButton("button0", "button0");
+            PixiManager.getInstance().stage.addChild(button);
+            button.y = 200;
+            button.enable();
+            console.log("sam", button)
         }
     }
 }
