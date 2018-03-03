@@ -2,8 +2,9 @@
     "buttons":[
         {
             "id":"button0",
-            "width":300,
-            "height":200,
+            "width":200,
+            "height":80,
+            "hitArea":"button0Up",
             "displayers":[
                 "button0Text",
                 "button0Graphics"
@@ -16,25 +17,27 @@
             "class":"GraphicSwapper",
             "upGraphic":"button0Up",
             "overGraphic":"button0Over",
-            "downGraphic":"button0Down"
+            "downGraphic":"button0Down",
+            "downOffset":{"x":0, "y":5}
         },
         {
             "id":"button0Text",
             "class":"TextDisplayer",
             "upTextStyle":"buttonText0",
-            "overTextStyle":"buttonText0Over"
+            "overTextStyle":"buttonText0Over",
+            "downOffset":{"x":0, "y":8}
         }
     ],
     "textStyles":[
         {
             "id":"buttonText0",
             "fontFamily":"KenVector Future",
-            "fontSize":14,
-            "fill":"#CCCCCC"
+            "fontSize":18,
+            "fill":"#EEEEEE"
         },{
             "id":"buttonText0Over",
             "fontFamily":"KenVector Future",
-            "fontSize":14,
+            "fontSize":18,
             "fill":"#FFFFFF"
         }
     ]

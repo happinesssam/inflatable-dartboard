@@ -3,6 +3,7 @@ namespace utterlySuperb.inflatableDartboard.ui.button{
     import Sprite = PIXI.Sprite;
     import Texture = PIXI.Texture;
     import TextureHelper = utterlySuperb.inflatableDartboard.app.utils.TextureHelper;
+    import Point = PIXI.Point;
     export class ButtonGraphicSwapper implements IButtonDisplay{
 
         protected upGraphic:Sprite;
@@ -24,16 +25,15 @@ namespace utterlySuperb.inflatableDartboard.ui.button{
 
         protected makeSprites(button:Button, displayerOptions:ButtonDisplayOptionsGraphicsSwapper):void{
             this.upGraphic = this.createSprite(displayerOptions.upGraphic, button.config);
-            this.overGraphic = this.createSprite(displayerOptions.overGraphic, button.config);
-            this.downGraphic = this.createSprite(displayerOptions.downGraphic, button.config);
-            this.disableGraphic = this.createSprite(displayerOptions.disableGraphic, button.config);
-            this.selectedGraphic = this.createSprite(displayerOptions.selectedGraphic, button.config);
-            this.overGraphic = this.createSprite(displayerOptions.overGraphic, button.config);
-            this.selectedOverGraphic = this.createSprite(displayerOptions.selectedOverGraphic, button.config);
-            this.selectedDownGraphic = this.createSprite(displayerOptions.selectedDownGraphic, button.config);
+            this.overGraphic = this.createSprite(displayerOptions.overGraphic, button.config, displayerOptions.overOffset);
+            this.downGraphic = this.createSprite(displayerOptions.downGraphic, button.config, displayerOptions.downOffset);
+            this.disableGraphic = this.createSprite(displayerOptions.disableGraphic, button.config, displayerOptions.disableOffset);
+            this.selectedGraphic = this.createSprite(displayerOptions.selectedGraphic, button.config, displayerOptions.selectedOffset);
+            this.selectedOverGraphic = this.createSprite(displayerOptions.selectedOverGraphic, button.config, displayerOptions.overOffset);
+            this.selectedDownGraphic = this.createSprite(displayerOptions.selectedDownGraphic, button.config, displayerOptions.downOffset);
         }
 
-        private createSprite(texture:string, config:ButtonConfigOptions):Sprite{
+        private createSprite(texture:string, config:ButtonConfigOptions, offset?:Point):Sprite{
             let sprite:Sprite = null;
             if(texture){
                 sprite = Sprite.from(TextureHelper.getInstance().getAssetURl(texture));
@@ -41,7 +41,11 @@ namespace utterlySuperb.inflatableDartboard.ui.button{
                     sprite.width = config.width;
                 }
                 if(!_.isNaN(config.height)){
-                    sprite.width = config.height;
+                    sprite.height = config.height;
+                }
+                if(offset){
+                    sprite.x = offset.x;
+                    sprite.y = offset.y;
                 }
             }
             return sprite;
@@ -118,7 +122,7 @@ namespace utterlySuperb.inflatableDartboard.ui.button{
         }
 
         protected switchGraphic(button:Button, newGraphic:Sprite):void{
-            button.graphicHolder.removeChildren();
+            button.graphicHolder.removeChildren();//probably should just remove current sprite
             button.graphicHolder.addChild(newGraphic);
         }
 

@@ -11,7 +11,7 @@ namespace utterlySuperb.inflatableDartboard.ui.text{
 
         public getTextOptions(optionId:string):TextStyleOptions{
             if(this.options[optionId]){
-                return this.options[optionId];
+                return _.cloneDeep(this.options[optionId]);
             }
             return {};
         }

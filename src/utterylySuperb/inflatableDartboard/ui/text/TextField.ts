@@ -9,14 +9,19 @@ namespace utterlySuperb.inflatableDartboard.ui.text{
         private boxHeight:number;
         private align:string;
 
-        constructor(width:number, height:number, align:string="c", styleOptions:TextStyleOptions | string=null, copy:string=""){
+        constructor(width:number, height:number, align:string="c", styleOptions:TextStyleOptions | TextStyle | string=null, copy:string=""){
             super();
             this.boxWidth = width;
             this.boxHeight = height;
+            let style:TextStyle;
             if(typeof styleOptions=="string"){
                 styleOptions = TextHelper.getInstance().getTextOptions(styleOptions);
+                style = new TextStyle(styleOptions);
+            }else if(styleOptions instanceof TextStyle){
+                style = styleOptions;
+            }else{
+                style = new TextStyle(styleOptions);
             }
-            let style:TextStyle = new TextStyle(styleOptions);
             this.textField = new Text(copy, style);
             this.addChild(this.textField);
             this.align = align.toLowerCase();
@@ -52,10 +57,10 @@ namespace utterlySuperb.inflatableDartboard.ui.text{
                 this.textField.y = 0;
                 break;
                 case "b":
-                this.textField.y = this.boxHeight - this.textField.height;
+                this.textField.y = this.boxHeight - this.textField.height - 5;
                 break;
                 default:
-                this.textField.y = (this.boxHeight - this.textField.height)/2;
+                this.textField.y = (this.boxHeight - this.textField.height - 5)/2;
                 break;
             }
             if(this.align.length==2){

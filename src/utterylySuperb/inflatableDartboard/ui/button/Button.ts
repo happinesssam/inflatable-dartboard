@@ -10,6 +10,7 @@ namespace utterlySuperb.inflatableDartboard.ui.button{
     import ButtonConfigOptions = utterlySuperb.inflatableDartboard.ui.button.ButtonConfigOptions;
     import InteractionEvent = PIXI.interaction.InteractionEvent;
     import FunctionUtils = utterlySuperb.inflatableDarboard.utils.FunctionUtils;
+    import TextureHelper = utterlySuperb.inflatableDartboard.app.utils.TextureHelper;
 
     export class Button extends Container{
 
@@ -29,6 +30,7 @@ namespace utterlySuperb.inflatableDartboard.ui.button{
         public textField:TextField;
         private _selected:boolean;
         private _enabled:boolean;
+        protected mouseIsOver:boolean;
 
         constructor(config:ButtonConfigOptions, copy:string=""){
             super();
@@ -40,17 +42,20 @@ namespace utterlySuperb.inflatableDartboard.ui.button{
             this.textHolder = new Container();
             this.addChild(this.textHolder);
 
-            if(this.hitAreaGraphic){
+            if(config.hitArea){
+                this.hitAreaGraphic = Sprite.from(TextureHelper.getInstance().getAssetURl(config.hitArea));
+                if(config.width)this.hitAreaGraphic.width = config.width;
+                if(config.height)this.hitAreaGraphic.height = config.height;
                 this.clickArea = this.hitAreaGraphic;
                 this.addChild(this.clickArea);
                 this.clickArea.alpha = 0;
             }else{
-                this.clickArea = this.graphicHolder;
+                this.clickArea = this;
             }
 
             this.clickArea.on('pointerdown', this.onButtonDown.bind(this));
-            this.clickArea.on('pointerup', this.onButtonUp)
-            this.clickArea.on('pointerupoutside', this.onButtonUp)
+            this.clickArea.on('pointerup', this.onButtonUp.bind(this))
+            this.clickArea.on('pointerupoutside', this.onButtonUp.bind(this))
             this.clickArea.on('pointerover', this.onButtonOver.bind(this))
             this.clickArea.on('pointerout', this.onButtonOut.bind(this));
 
@@ -79,19 +84,23 @@ namespace utterlySuperb.inflatableDartboard.ui.button{
                     this.displayers.push(displayer);
                 });
             }
+            if(copy){
+                this.setText(copy);
+            }
         }        
 
         public enable():void{
-            this.clickArea.interactive = true;
+            this.clickArea.buttonMode = this.clickArea.interactive = true;           
             this._enabled = true;
             this.displayUp();
         }
 
         public disable(showDisable:boolean = true):void{
-            this.clickArea.interactive = false;
+            this.clickArea.buttonMode = this.clickArea.interactive = false;
             if(showDisable){
                 this.displayDisabled();
             }
+            this.mouseIsOver = false;
         }
 
         public get enabled():boolean{
@@ -130,17 +139,22 @@ namespace utterlySuperb.inflatableDartboard.ui.button{
         }
 
         private onButtonOver(e:InteractionEvent):void{
+            this.mouseIsOver = true;
             this.displayOver();
             this.onOver.dispatch(this);
         }        
 
         private onButtonOut(e:InteractionEvent):void{
+            this.mouseIsOver = false;
             this.displayUp();
             this.onOut.dispatch(this);
         }
 
         protected displayUp():void{
-            if(this.selected){
+            if(this.mouseIsOver){
+                this.displayOver();
+            }
+            else if(this.selected){
                 this.displaySelected();
             }else{
                 _.forEach(this.displayers, (displayer:IButtonDisplay)=>{
@@ -180,9 +194,16 @@ namespace utterlySuperb.inflatableDartboard.ui.button{
         }
 
         protected displaySelected():void{
-            _.forEach(this.displayers, (displayer:IButtonDisplay)=>{
-                displayer.setState(this, ButtonState.selected);
-            });
+            if(this.mouseIsOver){
+                _.forEach(this.displayers, (displayer:IButtonDisplay)=>{
+                    displayer.setState(this, ButtonState.selectedOver);
+                });
+            }else{
+                _.forEach(this.displayers, (displayer:IButtonDisplay)=>{
+                    displayer.setState(this, ButtonState.selected);
+                });
+            }
+            
         }
     }
     export enum ButtonState{

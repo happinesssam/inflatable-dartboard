@@ -11,6 +11,10 @@ namespace utterlySuperb.inflatableDartboard.ui.button{
         offsetX?:number;
         offsetY?:number;
         downOffset?:Point;
+        overOffset?:Point;
+        disableOffset?:Point;
+        selectedOffset?:Point;
+        multiline?:boolean;
         align?:string;
     }
 }

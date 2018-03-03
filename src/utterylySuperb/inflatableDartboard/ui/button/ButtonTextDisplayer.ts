@@ -10,16 +10,27 @@ namespace utterlySuperb.inflatableDartboard.ui.button{
         protected downTextStyle:TextStyle;
         protected disableTextStyle:TextStyle;
         protected selectedTextStyle:TextStyle;
-        private textStyles:TextStyle[];
+        protected textStyles:TextStyle[];
+        protected maxWidth:number;
+        protected maxHeight:number
         protected displayerOptions:ButtonOptionsBasicText;
 
         public static DISPLAY_ID:string = "TextDisplayer";
 
         public init(button:Button, displayerOptions:ButtonDisplayOptions):void{
             this.displayerOptions = displayerOptions as ButtonOptionsBasicText;
+            if(this.displayerOptions.width){
+                this.maxWidth = this.displayerOptions.width;
+            }else{
+                this.maxWidth = button.config.width;
+            }
+            if(this.displayerOptions.height){
+                this.maxHeight = this.displayerOptions.height;
+            }else{
+                this.maxHeight = button.config.height;
+            }
             this.makeStyles(this.displayerOptions);
-            this.makeText(button, this.displayerOptions);
-            
+            this.makeText(button, this.displayerOptions);            
         }
 
         protected makeStyles(displayerOptions:ButtonOptionsBasicText):void{
@@ -32,28 +43,23 @@ namespace utterlySuperb.inflatableDartboard.ui.button{
         }
     
         protected makeText(button:Button, displayerOptions:ButtonOptionsBasicText):void{
-          
-            let textWidth:number = button.config.width;
-            let textHeight:number = button.config.height;
+
             let textAlign:string = "c";
-            if(!_.isNaN(displayerOptions.width))textWidth = displayerOptions.width;
-            if(!_.isNaN(displayerOptions.height))textHeight = displayerOptions.height;
             if(displayerOptions.align)textAlign = button.config.align;
-            this.textField = new TextField(textWidth, textHeight, textAlign, 
-                displayerOptions.upTextStyle, "");
+            this.textField = new TextField(this.maxWidth, this.maxHeight, "c", this.upTextStyle, "hello");
             button.textHolder.addChild(this.textField);
-            if(!_.isNaN(displayerOptions.offsetX)){
-                this.textField.x = displayerOptions.offsetX;
-            }
-            if(!_.isNaN(displayerOptions.offsetY)){
-                this.textField.y = displayerOptions.offsetY;
-            }
+            this.placeText();
+            button.textHolder.addChild(this.textField);
         }
 
         protected getStyle(textOptions:TextStyleOptions | string):TextStyle{
             if(textOptions){
                 if(typeof textOptions=="string"){
                     textOptions = TextHelper.getInstance().getTextOptions(textOptions);
+                    if(this.displayerOptions.multiline){
+                        textOptions.wordWrap = true;
+                        textOptions.wordWrapWidth = this.maxWidth;
+                    }
                 }
                 let textStyle:TextStyle = new TextStyle(textOptions);
                 this.textStyles.push(textStyle);
@@ -63,17 +69,17 @@ namespace utterlySuperb.inflatableDartboard.ui.button{
         }
 
         protected placeText(isDown:boolean = false):void{
-            if(!_.isNaN(this.displayerOptions.offsetX)){
+            if(!_.isNaN(this.displayerOptions.offsetX) && !_.isUndefined(this.displayerOptions.offsetX)){
                 this.textField.x = this.displayerOptions.offsetX;
             }else{
                 this.textField.x = 0;
             }
-            if(!_.isNaN(this.displayerOptions.offsetY)){
+            if(!_.isNaN(this.displayerOptions.offsetY) && !_.isUndefined(this.displayerOptions.offsetY)){
                 this.textField.y = this.displayerOptions.offsetY;
             }else{
                 this.textField.y = 0;
             }
-            if(this.displayerOptions.downOffset){
+            if(this.displayerOptions.downOffset && isDown){
                 this.textField.x+=this.displayerOptions.downOffset.x;
                 this.textField.y+=this.displayerOptions.downOffset.y;
             }
@@ -107,27 +113,32 @@ namespace utterlySuperb.inflatableDartboard.ui.button{
 
         protected displayUp(button:Button):void{
             this.textField.setStyle(this.upTextStyle);
+            this.placeText();
         }
 
         protected displayOver(button:Button):void{
             if(this.overTextStyle){
-                this.textField.setStyle(this.overTextStyle);
+                this.textField.setStyle(this.overTextStyle);               
             }
+            this.placeText();
         }
         protected displayDown(button:Button):void{
             if(this.downTextStyle){
-                this.textField.setStyle(this.downTextStyle);
+                this.textField.setStyle(this.downTextStyle);               
             }
+            this.placeText(true);
         }
         protected displayDisabled(button:Button):void{
             if(this.disableTextStyle){
-                this.textField.setStyle(this.disableTextStyle);
+                this.textField.setStyle(this.disableTextStyle);                
             }
+            this.placeText();
         }
         protected displaySelected(button:Button):void{
             if(this.selectedTextStyle){
-                this.textField.setStyle(this.selectedTextStyle);
+                this.textField.setStyle(this.selectedTextStyle);               
             }
+            this.placeText();
         }
         public  setText(newText:string, button:Button, displayId?:string):void{
             if(displayId && this.displayerOptions.class!=displayId){
