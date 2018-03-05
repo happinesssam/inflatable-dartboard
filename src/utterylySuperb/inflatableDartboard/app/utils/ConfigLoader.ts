@@ -90,6 +90,12 @@ namespace utterlySuperb.inflatableDartboard.app.utils{
                             buttonHelper.addButtonObject(buttonOb);
                         });
                     }
+                    if(resourceData.data.nineSlices){
+                        let textureHelper:TextureHelper = TextureHelper.getInstance();
+                        _.forEach(resourceData.data.nineSlices, (nineSliceOb:any)=>{
+                            TextureHelper.getInstance().addNineSliceInfo(nineSliceOb.id, nineSliceOb);
+                        });
+                    }
                 }
             });
             appLoader.configHasLoaded();

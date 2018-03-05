@@ -1,18 +1,20 @@
 ///<reference path="..\..\app\utils\TextureHelper.ts"/>
 namespace utterlySuperb.inflatableDartboard.ui.button{
     import Sprite = PIXI.Sprite;
+    import Container = PIXI.Container;
     import Texture = PIXI.Texture;
     import TextureHelper = utterlySuperb.inflatableDartboard.app.utils.TextureHelper;
     import Point = PIXI.Point;
     export class ButtonGraphicSwapper implements IButtonDisplay{
 
-        protected upGraphic:Sprite;
-        protected overGraphic?:Sprite;
-        protected downGraphic?:Sprite;
-        protected disableGraphic?:Sprite;
-        protected selectedGraphic?:Sprite;
-        protected selectedOverGraphic?:Sprite;
-        protected selectedDownGraphic?:Sprite;
+        protected upGraphic:Container;
+        protected overGraphic?:Container;
+        protected downGraphic?:Container;
+        protected disableGraphic?:Container;
+        protected selectedGraphic?:Container;
+        protected selectedOverGraphic?:Container;
+        protected selectedDownGraphic?:Container;
+        protected currentGraphic:Container;
         protected displayerOptions:ButtonDisplayOptions;
 
         //I guess there is a better way of doing this?
@@ -33,10 +35,10 @@ namespace utterlySuperb.inflatableDartboard.ui.button{
             this.selectedDownGraphic = this.createSprite(displayerOptions.selectedDownGraphic, button.config, displayerOptions.downOffset);
         }
 
-        private createSprite(texture:string, config:ButtonConfigOptions, offset?:Point):Sprite{
-            let sprite:Sprite = null;
+        private createSprite(texture:string, config:ButtonConfigOptions, offset?:Point):Container{
+            let sprite:Container = null;
             if(texture){
-                sprite = Sprite.from(TextureHelper.getInstance().getAssetURl(texture));
+                sprite = TextureHelper.getInstance().getAsset(texture);
                 if(!_.isNaN(config.width)){
                     sprite.width = config.width;
                 }
@@ -121,9 +123,13 @@ namespace utterlySuperb.inflatableDartboard.ui.button{
             }    
         }
 
-        protected switchGraphic(button:Button, newGraphic:Sprite):void{
-            button.graphicHolder.removeChildren();//probably should just remove current sprite
+        protected switchGraphic(button:Button, newGraphic:Container):void{
+            if(newGraphic==this.currentGraphic) return;
+            if(this.currentGraphic){
+                button.graphicHolder.removeChild(this.currentGraphic);
+            }
             button.graphicHolder.addChild(newGraphic);
+            this.currentGraphic = newGraphic;
         }
 
         public setText(newText:string, button:Button, displayId?:string):void{

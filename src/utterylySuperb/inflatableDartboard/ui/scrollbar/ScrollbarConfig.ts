@@ -3,11 +3,13 @@ namespace utterlySuperb.inflatableDartboard.ui.interfaces{
     import ButtonConfigOptions = utterlySuperb.inflatableDartboard.ui.button.ButtonConfigOptions;
     import Texture = PIXI.Texture;
     export interface ScrollbarConfig{
-        upButton?:ButtonConfigOptions;
-        downButton?:ButtonConfigOptions;
-        scrollbar:ButtonConfigOptions;
-        bg?:Texture;
+        upButton?:ButtonConfigOptions | string;
+        downButton?:ButtonConfigOptions | string;
+        scrollbar:ButtonConfigOptions | string;
+        bg?:Texture | string;
+        width:number;
         height:number;
         step:number;
+        buttonsHeight?:number;
     }
 }

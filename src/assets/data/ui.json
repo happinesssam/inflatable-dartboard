@@ -40,5 +40,29 @@
             "fontSize":18,
             "fill":"#FFFFFF"
         }
+    ],
+    "nineSlices":[
+        {
+            "id":"button0Up",
+            "texture":"button0Up",
+            "left":10,
+            "right":10,
+            "top":10,
+            "bottom":10
+        },{
+            "id":"button0Over",
+            "texture":"button0Over",
+            "left":10,
+            "right":10,
+            "top":10,
+            "bottom":10
+        },{
+            "id":"button0Down",
+            "texture":"button0Down",
+            "left":10,
+            "right":10,
+            "top":10,
+            "bottom":10
+        }
     ]
 }

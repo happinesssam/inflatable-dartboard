@@ -124,6 +124,13 @@ namespace utterlySuperb.inflatableDartboard.ui.button{
             }
         }
 
+        public setDimensions(width:number, height:number):void{
+            if(this.clickArea != this){
+                this.clickArea.width = width;
+                this.clickArea.height = height;
+            }
+        }
+
         public get selected():boolean{
             return this._selected;
         }
