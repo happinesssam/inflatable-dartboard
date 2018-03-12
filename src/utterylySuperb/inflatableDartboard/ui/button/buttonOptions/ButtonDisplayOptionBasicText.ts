@@ -8,8 +8,6 @@ namespace utterlySuperb.inflatableDartboard.ui.button{
         selectedTextStyle?:PIXI.TextStyleOptions | string;
         width?:number;
         height?:number;
-        offsetX?:number;
-        offsetY?:number;
         downOffset?:Point;
         overOffset?:Point;
         disableOffset?:Point;

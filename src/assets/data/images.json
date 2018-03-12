@@ -2,6 +2,8 @@
     "images":[
         {"id":"button0Up", "path":"assets/images/ui/blue_button00.png"},
         {"id":"button0Down", "path":"assets/images/ui/blue_button01.png"},
-        {"id":"button0Over", "path":"assets/images/ui/blue_button_over.png"}
+        {"id":"button0Over", "path":"assets/images/ui/blue_button_over.png"},
+        {"id":"arrowUpGrey", "path":"assets/images/ui/grey_arrowUpGrey.png"},
+        {"id":"arrowUpWhite", "path":"assets/images/ui/grey_arrowUpWhite.png"}
     ]
 }

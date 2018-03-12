@@ -37,6 +37,12 @@ namespace utterlySuperb.inflatableDartboard.ui.text{
             return this.textField.text;
         }
 
+        public setDimensions(width:number, height:number):void{
+            this.boxWidth = width;
+            this.boxHeight = height;
+            this.placeText();
+        }
+
         public setStyle(style:TextStyle):void{
             this.textField.style = style;
             this.placeText();

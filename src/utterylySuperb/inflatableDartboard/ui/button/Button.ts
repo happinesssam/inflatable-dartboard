@@ -31,6 +31,8 @@ namespace utterlySuperb.inflatableDartboard.ui.button{
         private _selected:boolean;
         private _enabled:boolean;
         protected mouseIsOver:boolean;
+        private _buttonWidth:number = 100;
+        private _buttonHeight:number = 100;
 
         constructor(config:ButtonConfigOptions, copy:string=""){
             super();
@@ -42,10 +44,13 @@ namespace utterlySuperb.inflatableDartboard.ui.button{
             this.textHolder = new Container();
             this.addChild(this.textHolder);
 
+            if(config.width)this._buttonWidth = config.width;
+            if(config.height)this._buttonHeight = config.height;
+
             if(config.hitArea){
                 this.hitAreaGraphic = Sprite.from(TextureHelper.getInstance().getAssetURl(config.hitArea));
-                if(config.width)this.hitAreaGraphic.width = config.width;
-                if(config.height)this.hitAreaGraphic.height = config.height;
+                this.hitAreaGraphic.width = this._buttonWidth;
+                this.hitAreaGraphic.height = this._buttonHeight;
                 this.clickArea = this.hitAreaGraphic;
                 this.addChild(this.clickArea);
                 this.clickArea.alpha = 0;
@@ -73,6 +78,9 @@ namespace utterlySuperb.inflatableDartboard.ui.button{
                         case ButtonGraphicSwapper.DISPLAY_ID:
                         classOb = ButtonGraphicSwapper;
                         break;
+                        case ButtonIconDisplayer.DISPLAY_ID:
+                        classOb = ButtonIconDisplayer;
+                        break;
                         default:
                         classOb = FunctionUtils.stringToFunction(displayerConfig.class);
                     }
@@ -80,7 +88,7 @@ namespace utterlySuperb.inflatableDartboard.ui.button{
  
                     let displayer:IButtonDisplay = new classOb(this) as IButtonDisplay;
                     displayer.init(this, displayerConfig);
-                    displayer.setText(copy, this);
+                    displayer.setText(copy);
                     this.displayers.push(displayer);
                 });
             }
@@ -109,7 +117,7 @@ namespace utterlySuperb.inflatableDartboard.ui.button{
 
         public setText(newText:string, displayId?:string):void{
             _.forEach(this.displayers, (displayer:IButtonDisplay)=>{
-                displayer.setText(newText, this, displayId);
+                displayer.setText(newText, displayId);
             });
         }
 
@@ -129,32 +137,65 @@ namespace utterlySuperb.inflatableDartboard.ui.button{
                 this.clickArea.width = width;
                 this.clickArea.height = height;
             }
+            this._buttonWidth = width;
+            this._buttonHeight = height;
+            this.onDimensionChange();
+        }
+
+        public set buttonWidth(value:number){
+            if(value!=this._buttonWidth){
+                this._buttonWidth = value;
+                if(this.clickArea!=this){
+                    this.clickArea.width = value;
+                }
+                this.onDimensionChange();
+            }
+        }
+        public get buttonWidth():number{return this._buttonWidth;}
+
+        public set buttonHeight(value:number){
+            if(value!=this._buttonHeight){
+                this._buttonHeight = value;
+                if(this.clickArea!=this){
+                    this.clickArea.height = value;
+                }
+                this.onDimensionChange();
+            }
+        }
+        public get buttonHeight():number{return this._buttonHeight;}
+
+        private onDimensionChange():void{
+
         }
 
         public get selected():boolean{
             return this._selected;
         }
 
+        public getDisplayer(id:string):IButtonDisplay{
+            return _.find(this.displayers, {id:id});
+        }
+
         private onButtonDown(e:InteractionEvent):void{
             this.displayDown();
-            this.onDown.dispatch(this);
+            this.onDown.dispatch(this, e);
         }        
 
         private onButtonUp(e:InteractionEvent):void{
             this.displayUp();
-            this.onUp.dispatch(this);
+            this.onUp.dispatch(this, e);
         }
 
         private onButtonOver(e:InteractionEvent):void{
             this.mouseIsOver = true;
             this.displayOver();
-            this.onOver.dispatch(this);
+            this.onOver.dispatch(this, e);
         }        
 
         private onButtonOut(e:InteractionEvent):void{
             this.mouseIsOver = false;
             this.displayUp();
-            this.onOut.dispatch(this);
+            this.onOut.dispatch(this, e);
         }
 
         protected displayUp():void{
@@ -165,7 +206,7 @@ namespace utterlySuperb.inflatableDartboard.ui.button{
                 this.displaySelected();
             }else{
                 _.forEach(this.displayers, (displayer:IButtonDisplay)=>{
-                    displayer.setState(this, ButtonState.up);
+                    displayer.setState(ButtonState.up);
                 });
             }
         }
@@ -173,11 +214,11 @@ namespace utterlySuperb.inflatableDartboard.ui.button{
         protected displayOver():void{
             if(this.selected){
                 _.forEach(this.displayers, (displayer:IButtonDisplay)=>{
-                    displayer.setState(this, ButtonState.selectedOver);
+                    displayer.setState(ButtonState.selectedOver);
                 });
             }else{
                 _.forEach(this.displayers, (displayer:IButtonDisplay)=>{
-                    displayer.setState(this, ButtonState.over);
+                    displayer.setState(ButtonState.over);
                 });
             }
         }
@@ -185,29 +226,29 @@ namespace utterlySuperb.inflatableDartboard.ui.button{
         protected displayDown():void{
             if(this.selected){
                 _.forEach(this.displayers, (displayer:IButtonDisplay)=>{
-                    displayer.setState(this, ButtonState.selectedDown);
+                    displayer.setState(ButtonState.selectedDown);
                 });
             }else{
                 _.forEach(this.displayers, (displayer:IButtonDisplay)=>{
-                    displayer.setState(this, ButtonState.down);
+                    displayer.setState(ButtonState.down);
                 });
             }
         }
 
         protected displayDisabled():void{
             _.forEach(this.displayers, (displayer:IButtonDisplay)=>{
-                displayer.setState(this, ButtonState.disabled);
+                displayer.setState(ButtonState.disabled);
             });
         }
 
         protected displaySelected():void{
             if(this.mouseIsOver){
                 _.forEach(this.displayers, (displayer:IButtonDisplay)=>{
-                    displayer.setState(this, ButtonState.selectedOver);
+                    displayer.setState(ButtonState.selectedOver);
                 });
             }else{
                 _.forEach(this.displayers, (displayer:IButtonDisplay)=>{
-                    displayer.setState(this, ButtonState.selected);
+                    displayer.setState(ButtonState.selected);
                 });
             }
             
@@ -220,6 +261,7 @@ namespace utterlySuperb.inflatableDartboard.ui.button{
         disabled,
         selected,
         selectedOver,
-        selectedDown
+        selectedDown,
+        all
     }
 }
