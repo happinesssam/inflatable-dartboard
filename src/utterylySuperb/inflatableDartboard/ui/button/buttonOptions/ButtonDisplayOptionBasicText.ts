@@ -6,12 +6,6 @@ namespace utterlySuperb.inflatableDartboard.ui.button{
         downTextStyle?:PIXI.TextStyleOptions | string;
         disableTextStyle?:PIXI.TextStyleOptions | string;
         selectedTextStyle?:PIXI.TextStyleOptions | string;
-        width?:number;
-        height?:number;
-        downOffset?:Point;
-        overOffset?:Point;
-        disableOffset?:Point;
-        selectedOffset?:Point;
         multiline?:boolean;
         align?:string;
     }

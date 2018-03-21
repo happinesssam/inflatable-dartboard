@@ -60,10 +60,10 @@ namespace utterlySuperb.inflatableDartboard.ui.button{
                 item.y = 0;
                 break;
                 case "b":
-                item.y = height - this.button.height - 5;
+                item.y =  this.button.buttonHeight - height;
                 break;
                 default:
-                item.y = (height - this.button.height)/2;
+                item.y = (this.button.buttonHeight - height)/2;
                 break;
             }
             if(align.length==2){
@@ -72,14 +72,14 @@ namespace utterlySuperb.inflatableDartboard.ui.button{
                     item.x = 0;
                     break;
                     case "r":
-                    item.x = width - this.button.width;
+                    item.x = this.button.buttonWidth - width;
                     break;
                     default:
-                    item.x = (width - this.button.width)/2;
+                    item.x = (this.button.buttonWidth - width)/2;
                     break;
                 }
             }else{
-                item.x = (width - this.button.width)/2;
+                item.x = (this.button.buttonWidth- width)/2;
             }
             if(this._displayerOptions.offsetX)item.x+=this._displayerOptions.offsetX;
             if(this._displayerOptions.offsetY)item.y+=this._displayerOptions.offsetY;

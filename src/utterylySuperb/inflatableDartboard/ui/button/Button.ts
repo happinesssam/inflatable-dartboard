@@ -26,6 +26,7 @@ namespace utterlySuperb.inflatableDartboard.ui.button{
         public config:ButtonConfigOptions;
         public graphicHolder:Container;
         public textHolder:Container;
+        public currentState:ButtonState = ButtonState.up;
         protected clickArea:Container;
         public textField:TextField;
         private _selected:boolean;
@@ -33,6 +34,7 @@ namespace utterlySuperb.inflatableDartboard.ui.button{
         protected mouseIsOver:boolean;
         private _buttonWidth:number = 100;
         private _buttonHeight:number = 100;
+        public static NUM_STATES:number = 7;//+all
 
         constructor(config:ButtonConfigOptions, copy:string=""){
             super();
@@ -105,10 +107,14 @@ namespace utterlySuperb.inflatableDartboard.ui.button{
 
         public disable(showDisable:boolean = true):void{
             this.clickArea.buttonMode = this.clickArea.interactive = false;
+            this.mouseIsOver = false;
+            this._enabled = false;
             if(showDisable){
                 this.displayDisabled();
+            }else{
+                this.displayUp();
             }
-            this.mouseIsOver = false;
+            
         }
 
         public get enabled():boolean{
@@ -120,12 +126,17 @@ namespace utterlySuperb.inflatableDartboard.ui.button{
                 displayer.setText(newText, displayId);
             });
         }
-
+//TODO make it so now 'displayX', just applies currentState
         public set selected(value:boolean){
             if(value!=this._selected){
                 this._selected = value;
-                if(this._enabled){
-                    this.displayUp();
+
+                if(this._enabled){                    
+                    if(this.mouseIsOver){
+                        this.displayOver();
+                    }else{
+                        this.displayUp();
+                    }
                 }else{
                     this.displayDisabled();
                 }
@@ -165,7 +176,9 @@ namespace utterlySuperb.inflatableDartboard.ui.button{
         public get buttonHeight():number{return this._buttonHeight;}
 
         private onDimensionChange():void{
-
+            _.forEach(this.displayers, (displayer:IButtonDisplay)=>{
+                displayer.buttonDimensionChange();
+            })
         }
 
         public get selected():boolean{
@@ -182,7 +195,7 @@ namespace utterlySuperb.inflatableDartboard.ui.button{
         }        
 
         private onButtonUp(e:InteractionEvent):void{
-            this.displayUp();
+            this.displayUp();          
             this.onUp.dispatch(this, e);
         }
 
@@ -203,55 +216,50 @@ namespace utterlySuperb.inflatableDartboard.ui.button{
                 this.displayOver();
             }
             else if(this.selected){
-                this.displaySelected();
+                this.currentState=ButtonState.selected;
+                this.setDisplayerState();
             }else{
-                _.forEach(this.displayers, (displayer:IButtonDisplay)=>{
-                    displayer.setState(ButtonState.up);
-                });
+                this.currentState=ButtonState.up;
+                this.setDisplayerState();
             }
         }
 
         protected displayOver():void{
             if(this.selected){
-                _.forEach(this.displayers, (displayer:IButtonDisplay)=>{
-                    displayer.setState(ButtonState.selectedOver);
-                });
+                this.currentState = ButtonState.selectedOver;
             }else{
-                _.forEach(this.displayers, (displayer:IButtonDisplay)=>{
-                    displayer.setState(ButtonState.over);
-                });
+                this.currentState = ButtonState.over;
             }
+            this.setDisplayerState();
         }
 
         protected displayDown():void{
             if(this.selected){
-                _.forEach(this.displayers, (displayer:IButtonDisplay)=>{
-                    displayer.setState(ButtonState.selectedDown);
-                });
+                this.currentState = ButtonState.selectedDown;
             }else{
-                _.forEach(this.displayers, (displayer:IButtonDisplay)=>{
-                    displayer.setState(ButtonState.down);
-                });
+                this.currentState = ButtonState.down;
             }
+            this.setDisplayerState();
         }
 
         protected displayDisabled():void{
-            _.forEach(this.displayers, (displayer:IButtonDisplay)=>{
-                displayer.setState(ButtonState.disabled);
-            });
+            this.currentState=this.selected ? ButtonState.selectedDisabled : ButtonState.disabled;
+            this.setDisplayerState();
         }
 
         protected displaySelected():void{
             if(this.mouseIsOver){
-                _.forEach(this.displayers, (displayer:IButtonDisplay)=>{
-                    displayer.setState(ButtonState.selectedOver);
-                });
+                this.currentState=ButtonState.selectedOver;
             }else{
-                _.forEach(this.displayers, (displayer:IButtonDisplay)=>{
-                    displayer.setState(ButtonState.selected);
-                });
-            }
-            
+                this.currentState=ButtonState.selected;
+            }     
+            this.setDisplayerState();       
+        }
+
+        protected setDisplayerState():void{
+            _.forEach(this.displayers, (displayer:IButtonDisplay)=>{
+                displayer.setState(this.currentState);
+            });
         }
     }
     export enum ButtonState{
@@ -262,6 +270,7 @@ namespace utterlySuperb.inflatableDartboard.ui.button{
         selected,
         selectedOver,
         selectedDown,
+        selectedDisabled,
         all
     }
 }

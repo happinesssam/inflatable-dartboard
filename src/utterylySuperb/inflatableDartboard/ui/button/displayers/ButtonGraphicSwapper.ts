@@ -71,6 +71,7 @@ namespace utterlySuperb.inflatableDartboard.ui.button{
                 break;
             }
             if(!info.obj && this.defaultState.obj)info.obj = this.defaultState.obj;
+            this.states.push(info);
         }
 
         private createGraphic(texture:string):Container{
@@ -82,47 +83,8 @@ namespace utterlySuperb.inflatableDartboard.ui.button{
             return sprite;
         }
 
-        protected makeSprites(button:Button, displayerOptions:ButtonDisplayOptionsGraphicsSwapper):void{
-            this.upGraphic = this.createSprite(displayerOptions.upGraphic, button.config);
-            this.overGraphic = this.createSprite(displayerOptions.overGraphic, button.config, displayerOptions.overOffset);
-            this.downGraphic = this.createSprite(displayerOptions.downGraphic, button.config, displayerOptions.downOffset);
-            this.disableGraphic = this.createSprite(displayerOptions.disableGraphic, button.config, displayerOptions.disableOffset);
-            this.selectedGraphic = this.createSprite(displayerOptions.selectedGraphic, button.config, displayerOptions.selectedOffset);
-            this.selectedOverGraphic = this.createSprite(displayerOptions.selectedOverGraphic, button.config, displayerOptions.overOffset);
-            this.selectedDownGraphic = this.createSprite(displayerOptions.selectedDownGraphic, button.config, displayerOptions.downOffset);
-        }
-
-        private createSprite(texture:string, config:ButtonConfigOptions, offset?:Point):Container{
-            let sprite:Container = null;
-            if(texture){
-                sprite = TextureHelper.getInstance().getAsset(texture);
-                if(_.isNumber(this.displayerOptions.width)){
-                    sprite.width = this.displayerOptions.width;
-                }else if(_.isNumber(config.width)){
-                    sprite.width = config.width;
-                }
-                
-                if(_.isNumber(this.displayerOptions.height)){
-                    sprite.height = this.displayerOptions.height;
-                }else if(_.isNumber(config.height)){
-                    sprite.height = config.height;
-                }
-                this.ignoreButtonSize = (_.isNumber(this.displayerOptions.width) && _.isNumber(this.displayerOptions.height));
-                if(this.ignoreButtonSize){
-                    if(offset){
-                        this.offsets.push({offset:offset, obj:sprite});
-                    }
-                    this.placeItemByAlign(sprite, this.button.buttonWidth, this.button.buttonHeight);
-                }else if(offset){
-                    sprite.x = offset.x;
-                    sprite.y = offset.y;
-                }                
-            }            
-            this.sprites.push(sprite);
-            return this.upGraphic;//there must be an upgraphic!
-        }
-
         protected applyState(stateInfo:StateInfo):void{
+            console.log(stateInfo, this.statesPosition);
             stateInfo.obj.x = this.statesPosition.x + stateInfo.offset.x;
             stateInfo.obj.y = this.statesPosition.y + stateInfo.offset.y;
             this.switchGraphic(stateInfo.obj);
@@ -151,6 +113,7 @@ namespace utterlySuperb.inflatableDartboard.ui.button{
         protected placeGraphics():void{
             this.placeItemByAlign(this.statesPosition, this.defaultState.obj.width, this.defaultState.obj.height);
             //sorry, all state have to have the same height and width
+            this.applyState(this.getStateInfo(this.button.currentState));
         }
 
         public setState(state:ButtonState):void{
