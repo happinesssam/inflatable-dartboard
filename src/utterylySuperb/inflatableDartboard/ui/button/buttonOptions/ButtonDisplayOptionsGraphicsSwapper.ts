@@ -12,5 +12,7 @@ namespace utterlySuperb.inflatableDartboard.ui.button{
         overOffset?:Point;
         disableOffset?:Point;
         selectedOffset?:Point;
+        depth?:number;
+        noResize?:boolean;
     }
 }

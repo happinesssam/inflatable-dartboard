@@ -26,17 +26,17 @@
             "class":"TextDisplayer",
             "upTextStyle":"buttonText0",
             "overTextStyle":"buttonText0Over",
-            "downOffset":{"x":0, "y":8}
+            "downOffset":{"x":0, "y":10}
         },
         {
             "id":"button0Icon",
             "class":"IconSwapper",
-            "upGraphic":"arrowUpGrey",
-            "overGraphic":"arrowUpWhite",
+            "upGraphic":"arrowUpWhite",
             "align":"cl",
             "width":20,
             "height":20,
-            "downOffset":{"x":0, "y":8}
+            "offsetX":10,
+            "downOffset":{"x":0, "y":10}
         }
     ],
     "textStyles":[

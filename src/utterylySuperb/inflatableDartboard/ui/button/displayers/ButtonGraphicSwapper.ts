@@ -30,7 +30,56 @@ namespace utterlySuperb.inflatableDartboard.ui.button{
 
         public init(button:Button, displayerOptions:ButtonDisplayOptions):void{
             super.init(button, displayerOptions);
-            this.makeSprites(button, displayerOptions as ButtonDisplayOptionsGraphicsSwapper);
+            this.ignoreButtonSize = (_.isNumber(displayerOptions.width) && _.isNumber(displayerOptions.height));
+            if(this.ignoreButtonSize){
+                this.setDisplayerDimensions(displayerOptions.width, displayerOptions.height);
+            }else{
+                this.buttonDimensionChange();
+            }
+        }
+
+        protected createState(state:ButtonState):void{
+            let info:StateInfo = new StateInfo(state);
+            switch(state){
+                case ButtonState.up:
+                info.obj = this.createGraphic(this.displayerOptions.upGraphic);
+                this.defaultState = info;
+                break;
+                case ButtonState.down:
+                info.obj = this.createGraphic(this.displayerOptions.downGraphic);
+                if(this.displayerOptions.downOffset)info.offset = this.displayerOptions.downOffset;
+                break;
+                case ButtonState.selectedDown:
+                info.obj = this.createGraphic(this.displayerOptions.selectedDownGraphic || this.displayerOptions.downGraphic);
+                if(this.displayerOptions.downOffset)info.offset = this.displayerOptions.downOffset;
+                break;
+                case ButtonState.over:
+                info.obj = this.createGraphic(this.displayerOptions.overGraphic);
+                if(this.displayerOptions.overOffset)info.offset = this.displayerOptions.overOffset;
+                break;
+                case ButtonState.selectedOver:
+                info.obj = this.createGraphic(this.displayerOptions.selectedOverGraphic || this.displayerOptions.overGraphic);
+                if(this.displayerOptions.overOffset)info.offset = this.displayerOptions.overOffset;
+                break;
+                case ButtonState.selected:
+                info.obj = this.createGraphic(this.displayerOptions.selectedGraphic);
+                if(this.displayerOptions.selectedOffset)info.offset = this.displayerOptions.selectedOffset;
+                break;
+                case ButtonState.disabled:
+                info.obj = this.createGraphic(this.displayerOptions.disableGraphic);
+                if(this.displayerOptions.disableOffset)info.offset = this.displayerOptions.disableOffset;
+                break;
+            }
+            if(!info.obj && this.defaultState.obj)info.obj = this.defaultState.obj;
+        }
+
+        private createGraphic(texture:string):Container{
+            let sprite:Container = null;
+            if(texture){
+                sprite = TextureHelper.getInstance().getAsset(texture);
+                this.sprites.push(sprite);
+            }
+            return sprite;
         }
 
         protected makeSprites(button:Button, displayerOptions:ButtonDisplayOptionsGraphicsSwapper):void{
@@ -70,58 +119,42 @@ namespace utterlySuperb.inflatableDartboard.ui.button{
                 }                
             }            
             this.sprites.push(sprite);
-            return sprite;
+            return this.upGraphic;//there must be an upgraphic!
         }
 
-        public setButtonDimensions(width:number, height:number):void{
-            if(!this.ignoreButtonSize){
+        protected applyState(stateInfo:StateInfo):void{
+            stateInfo.obj.x = this.statesPosition.x + stateInfo.offset.x;
+            stateInfo.obj.y = this.statesPosition.y + stateInfo.offset.y;
+            this.switchGraphic(stateInfo.obj);
+        }
+
+        public buttonDimensionChange():void{
+            if(!this.ignoreButtonSize && !this.displayerOptions.noResize){
+                _.forEach(this.sprites, (graphic:Container)=>{
+                    graphic.width = this.button.width;
+                    graphic.height = this.button.height;
+                });
+            }    
+            this.placeGraphics();        
+        }
+
+        public setDisplayerDimensions(width:number, height:number):void{
+            if(this.ignoreButtonSize && !this.displayerOptions.noResize){
                 _.forEach(this.sprites, (graphic:Container)=>{
                     graphic.width = width;
                     graphic.height = height;
                 });
-            }else{
-                this.placeGraphics();
-            }            
-        }
-
-        public setDisplayerDimensions(width:number, height:number):void{
-            _.forEach(this.sprites, (graphic:Container)=>{
-                graphic.width = width;
-                graphic.height = height;
-            });
+            }
             this.placeGraphics();
         }
 
         protected placeGraphics():void{
-            _.forEach(this.sprites, (sprite:Container)=>{
-                this.placeItemByAlign(sprite, this.button.buttonWidth, this.button.buttonHeight);
-            });
+            this.placeItemByAlign(this.statesPosition, this.defaultState.obj.width, this.defaultState.obj.height);
+            //sorry, all state have to have the same height and width
         }
 
         public setState(state:ButtonState):void{
-            switch(state){
-                case ButtonState.up:
-                this.displayUp();
-                break;
-                case ButtonState.over:
-                this.displayOver();
-                break;
-                case ButtonState.down:
-                this.displayDown();
-                break;
-                case ButtonState.selected:
-                this.displaySelected();
-                break;
-                case ButtonState.disabled:
-                this.displayDisabled();
-                break;
-                case ButtonState.selectedOver:
-                this.displaySelectedOver();
-                break;
-                case ButtonState.selectedDown:
-                this.displaySelectedDown();
-                break;
-            }
+            this.applyState(this.getStateInfo(state));
         }
 
         public changeImages(newGraphic:Container | string, states:ButtonState[]=null):void{

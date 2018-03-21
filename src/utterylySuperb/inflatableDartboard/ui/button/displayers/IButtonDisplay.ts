@@ -3,7 +3,7 @@ namespace utterlySuperb.inflatableDartboard.ui.button{
         init(button:Button, displayerOptions:ButtonDisplayOptions):void;
         setState(state:ButtonState):void;
         setText(newText:string, displayId?:string):void;
-        setButtonDimensions(width:number, height:number):void;
+        buttonDimensionChange():void;
         setDisplayerDimensions(width:number, height:number):void;
         cleanUp():void;
         id:string;
