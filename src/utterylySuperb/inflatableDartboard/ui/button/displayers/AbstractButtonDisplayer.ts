@@ -1,7 +1,7 @@
 namespace utterlySuperb.inflatableDartboard.ui.button{
     import Container = PIXI.Container;
     import Point = PIXI.Point;
-    import IPoint = utterlySuperb.inflatableDartboard.ui.interfaces.IPoint;
+    import IPoint = utterlySuperb.inflatableDartboard.utils.interfaces.IPoint;
     export class AbstractButtonDisplayer implements IButtonDisplay{
         protected _displayerOptions:ButtonDisplayOptions;
         protected states:StateInfo[] = [];
@@ -102,6 +102,10 @@ namespace utterlySuperb.inflatableDartboard.ui.button{
         constructor(state:ButtonState){
             this.state = state;
             this.offset = StateInfo.zeroPoint;
+        }
+
+        public setOffset(offset:Point):void{
+            this.offset = offset || StateInfo.zeroPoint;
         }
     }
 }

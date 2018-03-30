@@ -10,12 +10,18 @@ namespace utterlySuperb.inflatableDartboard.app{
     import ConfigLoader = utterlySuperb.inflatableDartboard.app.utils.ConfigLoader;
     import AppSettingsOptions = utterlySuperb.inflatableDartboard.app.model.AppSettingsOptions;
     export class App{
-        private settings:AppSettings;
+        public settings:AppSettings;
+        private static _instance:App;
 
         constructor(options:AppSettingsOptions){
+            App._instance = this;
             this.settings = new AppSettings(options);
             this.initPixi();
             this.loadConfig();
+        }
+
+        public static getInstance():App{
+            return App._instance;
         }
 
         private loadConfig():void{

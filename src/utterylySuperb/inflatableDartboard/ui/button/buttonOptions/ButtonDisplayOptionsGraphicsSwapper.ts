@@ -8,10 +8,10 @@ namespace utterlySuperb.inflatableDartboard.ui.button{
         selectedGraphic?:string;
         selectedOverGraphic?:string;
         selectedDownGraphic?:string;
-        downOffset?:Point;
-        overOffset?:Point;
-        disableOffset?:Point;
-        selectedOffset?:Point;
+        rotation?:number;
+        flipX?:boolean;
+        flipY?:boolean;
+        centreAnchor?:boolean;
         depth?:number;
         noResize?:boolean;
     }

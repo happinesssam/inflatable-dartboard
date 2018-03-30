@@ -35,7 +35,10 @@
             "align":"cl",
             "width":15,
             "height":15,
-            "offsetX":10,
+            "offsetX":20,
+            "offsetY":7,
+            "flipY":true,
+            "centreAnchor":true,
             "downOffset":{"x":0, "y":10}
         }
     ],

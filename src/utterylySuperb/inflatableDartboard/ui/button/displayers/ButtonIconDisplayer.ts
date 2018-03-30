@@ -5,13 +5,8 @@ namespace utterlySuperb.inflatableDartboard.ui.button{
 
         public static DISPLAY_ID:string = "IconSwapper";
 
-        protected switchGraphic(newGraphic:Container):void{
-            if(newGraphic==this.currentGraphic) return;
-            if(this.currentGraphic){
-                this.button.textHolder.removeChild(this.currentGraphic);
-            }
-            this.button.textHolder.addChild(newGraphic);
-            this.currentGraphic = newGraphic;
+        protected addContainer():void{
+            this.button.textHolder.addChild(this.holder);
         }
     }
 }

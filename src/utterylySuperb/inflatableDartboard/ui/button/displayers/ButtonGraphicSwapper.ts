@@ -8,13 +8,7 @@ namespace utterlySuperb.inflatableDartboard.ui.button{
     import Point = PIXI.Point;
     export class ButtonGraphicSwapper extends AbstractButtonDisplayer{
 
-        protected upGraphic:Container;
-        protected overGraphic?:Container;
-        protected downGraphic?:Container;
-        protected disableGraphic?:Container;
-        protected selectedGraphic?:Container;
-        protected selectedOverGraphic?:Container;
-        protected selectedDownGraphic?:Container;
+        protected holder:Sprite;
         protected currentGraphic:Container;
         protected ignoreButtonSize:boolean;
         protected sprites:Container[] = [];
@@ -30,12 +24,23 @@ namespace utterlySuperb.inflatableDartboard.ui.button{
 
         public init(button:Button, displayerOptions:ButtonDisplayOptions):void{
             super.init(button, displayerOptions);
+
+            this.holder = new Sprite();
+            if(_.isNumber(this.displayerOptions.rotation)) this.holder.rotation = this.displayerOptions.rotation;
+            if(this.displayerOptions.flipX)this.holder.scale.x = -1;
+            if(this.displayerOptions.flipY)this.holder.scale.y = -1;
+            this.addContainer();
+            
             this.ignoreButtonSize = (_.isNumber(displayerOptions.width) && _.isNumber(displayerOptions.height));
             if(this.ignoreButtonSize){
                 this.setDisplayerDimensions(displayerOptions.width, displayerOptions.height);
             }else{
                 this.buttonDimensionChange();
             }
+        }
+
+        protected addContainer():void{
+            this.button.graphicHolder.addChild(this.holder);
         }
 
         protected createState(state:ButtonState):void{
@@ -77,16 +82,23 @@ namespace utterlySuperb.inflatableDartboard.ui.button{
         private createGraphic(texture:string):Container{
             let sprite:Container = null;
             if(texture){
-                sprite = TextureHelper.getInstance().getAsset(texture);
-                this.sprites.push(sprite);
+                let stateWithSameGraphic:StateInfo = _.find(this.states, (state:StateInfo)=>{
+                    return state.obj.name == texture;
+                });
+                if(stateWithSameGraphic){
+                    sprite = stateWithSameGraphic.obj;
+                }else{
+                    sprite = TextureHelper.getInstance().getAsset(texture, texture);
+                    this.sprites.push(sprite);
+                    if(this.displayerOptions.centreAnchor && sprite["anchor"])sprite["anchor"].set(0.5);
+                }                
             }
             return sprite;
         }
 
         protected applyState(stateInfo:StateInfo):void{
-            console.log(stateInfo, this.statesPosition);
-            stateInfo.obj.x = this.statesPosition.x + stateInfo.offset.x;
-            stateInfo.obj.y = this.statesPosition.y + stateInfo.offset.y;
+            this.holder.x = this.statesPosition.x + stateInfo.offset.x;
+            this.holder.y = this.statesPosition.y + stateInfo.offset.y;
             this.switchGraphic(stateInfo.obj);
         }
 
@@ -125,7 +137,7 @@ namespace utterlySuperb.inflatableDartboard.ui.button{
                 newGraphic = TextureHelper.getInstance().getAsset(newGraphic);
             }
             if(!states){
-                this.changeImage(newGraphic);
+                this.changeImage(newGraphic, ButtonState.all);
             }else{
                 _.forEach(states, (state:ButtonState)=>{
                     this.changeImage(newGraphic, state);
@@ -133,103 +145,38 @@ namespace utterlySuperb.inflatableDartboard.ui.button{
             }
         }
         
-        public changeImage(newGraphic:Container | string, state:ButtonState=ButtonState.up):void{
-            if(typeof newGraphic=="string"){
-                newGraphic = TextureHelper.getInstance().getAsset(newGraphic);
-            }
-            if(state==ButtonState.all || state==ButtonState.up){
-                this.upGraphic = this.switchImage(newGraphic, this.upGraphic);
-            }
-            if(state==ButtonState.all || state==ButtonState.down){
-                this.downGraphic = this.switchImage(newGraphic, this.downGraphic);
-            }
-            if(state==ButtonState.all || state==ButtonState.over){
-                this.overGraphic = this.switchImage(newGraphic, this.overGraphic);
-            }
-            if(state==ButtonState.all || state==ButtonState.disabled){
-                this.disableGraphic = this.switchImage(newGraphic, this.disableGraphic);
-            }
-            if(state==ButtonState.all || state==ButtonState.selected){
-                this.selectedGraphic = this.switchImage(newGraphic, this.selectedGraphic);
-            }
-            if(state==ButtonState.all || state==ButtonState.selectedOver){
-                this.selectedOverGraphic = this.switchImage(newGraphic, this.selectedOverGraphic);
-            }
-            if(state==ButtonState.all || state==ButtonState.selectedDown){
-                this.selectedDownGraphic = this.switchImage(newGraphic, this.selectedDownGraphic);
-            }
-            
-            if(!this.ignoreButtonSize){
-                newGraphic.width = this.button.buttonWidth;
-                newGraphic.height = this.button.buttonHeight;
+        public changeImage(newGraphic:Container | string, state:ButtonState=ButtonState.up, offset:Point = null):void{
+            let doResize:boolean;//update states that are piggybacking on up...
+            if(typeof newGraphic=="string")newGraphic=this.createGraphic(newGraphic);
+            if(this.ignoreButtonSize){
+                this.setDisplayerDimensions(this.displayerOptions.width, this.displayerOptions.height);
             }else{
-                this.placeItemByAlign(newGraphic, this.button.buttonWidth,  this.button.buttonHeight);
-            }  
-        }
-
-        protected switchImage(newGraphic:Container, oldGraphic:Container):Container{
-            if(oldGraphic==this.currentGraphic){
-                this.switchGraphic(newGraphic);
-            }    
-            if(oldGraphic){
-                this.sprites.splice(this.sprites.indexOf(oldGraphic), 1);
+                this.buttonDimensionChange();
+            }
+            if(state==ButtonState.all){                
+                _.forEach(this.states, (stateInfo:StateInfo)=>{
+                    stateInfo.obj=newGraphic;
+                    if(offset)stateInfo.offset = offset;
+                });
+                doResize = true;
+                this.setState(this.button.currentState);
+            }else{
+                let stateInfo:StateInfo = this.getStateInfo(state);
+                stateInfo.setOffset(offset);
+                stateInfo.obj = newGraphic;
+                doResize = true;
+                if(this.button.currentState==state){
+                    this.applyState(stateInfo);
+                }   
             }        
-            if(this.sprites.indexOf(newGraphic)==-1){
-                this.sprites.push(newGraphic);
-            }
-            return newGraphic;
-        }
-
-        protected displayUp():void{
-            this.switchGraphic(this.upGraphic);
-        }
-        
-        protected displayOver():void{
-            if(this.overGraphic){
-                this.switchGraphic(this.overGraphic);
-            }
-        }
-
-        protected displayDown():void{
-            if(this.downGraphic){
-                this.switchGraphic(this.downGraphic);
-            }
-        }
-
-        protected displayDisabled():void{
-            if(this.disableGraphic){
-                this.switchGraphic(this.disableGraphic);
-            }
-        }
-
-        protected displaySelected():void{
-            if(this.selectedGraphic){
-                this.switchGraphic(this.selectedGraphic);
-            }
-        }
-        
-        protected displaySelectedOver():void{
-            if(this.selectedOverGraphic){
-                this.switchGraphic(this.selectedOverGraphic);
-            }else if(this.selectedGraphic){
-                this.switchGraphic(this.selectedGraphic);
-            }  
-        }
-        
-        protected displaySelectedDown():void{
-            if(this.selectedDownGraphic){
-                this.switchGraphic(this.selectedDownGraphic);
-            }else if(this.selectedGraphic){
-                this.switchGraphic(this.selectedGraphic);
-            }    
         }
 
         protected switchGraphic(newGraphic:Container):void{
             if(newGraphic==this.currentGraphic) return;
             if(this.currentGraphic){
-                this.button.graphicHolder.removeChild(this.currentGraphic);
+                this.holder.removeChild(this.currentGraphic);
             }
-            this.button.graphicHolder.addChild(newGraphic);
+            this.holder.addChild(newGraphic);
             this.currentGraphic = newGraphic;
         }
 

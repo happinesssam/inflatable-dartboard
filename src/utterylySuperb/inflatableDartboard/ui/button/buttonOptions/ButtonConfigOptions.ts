@@ -8,9 +8,5 @@ namespace utterlySuperb.inflatableDartboard.ui.button{
         autoToggle?:boolean;
         displayers?:string[];
         hitArea?:string;
-        downOffset?:Point;
-        overOffset?:Point;
-        disableOffset?:Point;
-        selectedOffset?:Point;
     }
 }
