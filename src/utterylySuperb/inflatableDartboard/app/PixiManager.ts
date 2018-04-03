@@ -1,11 +1,18 @@
+///<reference path="utils/GlobalDispatcher.ts"/>
 namespace utterlySuperb.inflatableDartboard.app{
     import AppSettings = utterlySuperb.inflatableDartboard.app.model.AppSettings;
     import Container = PIXI.Container;
+    import GlobalDispatcher = utterlySuperb.inflatableDartboard.app.utils.GlobalDispatcher;
     export class PixiManager{
         private static _instance:PixiManager;
         public container: HTMLElement;
         public stage: Container;
+        private running:boolean;
         private renderer:PIXI.WebGLRenderer | PIXI.CanvasRenderer;
+        private _cssWidth:number;
+        private _cssHeight:number;
+
+        public static ON_RESIZE:string = "PixiManager.onResize";
 
         constructor(){
             this.stage = new Container();
@@ -24,6 +31,7 @@ namespace utterlySuperb.inflatableDartboard.app{
              || document.body : document.body;
             this.container.appendChild(this.renderer.view);            
             this.resize(appSettings);
+            this.running = true;
             this.render();
             window.onresize = this.resize.bind(this, appSettings);
         }
@@ -81,6 +89,7 @@ namespace utterlySuperb.inflatableDartboard.app{
                 cssY = Math.round((windowHeight - cssHeight)/2);
                 break;
                 case AppSettings.BEST_FIT:
+                throw("TODO. this is a dumb mode anyway");
                 break;
             }
             this.renderer.resize(rendererWidth, rendererHeight);
@@ -90,12 +99,51 @@ namespace utterlySuperb.inflatableDartboard.app{
             this.renderer.view.style.left = cssX + "px";
             this.renderer.view.style.top = cssY + "px";
 
+            this._cssWidth = cssWidth;
+            this._cssHeight = cssHeight;
+
+            GlobalDispatcher.getInstance().dispatch(PixiManager.ON_RESIZE, {rendererWidth:rendererWidth,
+                rendererHeight:rendererHeight, cssWidth:cssWidth, cssHeight:cssHeight});
+        }
+
+        public getSizeInfo():SizeInfo{
+            return {rendererWidth:this.rendererWidth, rendererHeight:this.rendererHeight, 
+                cssWidth:this.cssWidth, cssHeight:this.cssHeight};
+        }
+
+        public get rendererWidth():number
+        {
+            return this.renderer.width;
+        }
+
+        public get rendererHeight():number
+        {
+            return this.renderer.height;
+        }
+
+        public get cssWidth():number
+        {
+            return this._cssWidth;
+        }
+
+        public get cssHeight():number
+        {
+            return this._cssHeight;
         }
 
         private render() {
             requestAnimationFrame(this.render.bind(this));
         
-            this.renderer.render(this.stage);
+            if(this.running){
+                this.renderer.render(this.stage);
+            }            
         }
+    }
+
+    export interface SizeInfo{
+        rendererWidth:number;
+        rendererHeight:number;
+        cssWidth:number;
+        cssHeight:number;
     }
 }
