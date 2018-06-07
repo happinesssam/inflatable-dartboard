@@ -1,11 +1,13 @@
-///<reference path="..\..\ui\text\TextHelper.ts"/>
-///<reference path="..\..\ui\button\ButtonHelper.ts"/>
+///<reference path="..\..\ui\UIHelper.ts"/>
 namespace utterlySuperb.inflatableDartboard.app.utils{
     import Loader = PIXI.loaders.Loader;
-    import TextHelper = utterlySuperb.inflatableDartboard.ui.text.TextHelper;
-    import ButtonHelper = utterlySuperb.inflatableDartboard.ui.button.ButtonHelper;
+    import UIHelper = utterlySuperb.inflatableDartboard.ui.UIHelper;
     export class ConfigLoader{
+
+        public completeSignal:Signal;
+
         constructor(configPath:string){
+            this.completeSignal = new Signal();
             let configLoader:Loader = new Loader();
             configLoader.add("config", configPath);
             configLoader.onComplete.add(this.onConfigLoaded.bind(this));
@@ -14,7 +16,6 @@ namespace utterlySuperb.inflatableDartboard.app.utils{
         }
 
         private onConfigLoaded(e:Loader):void{
-            console.log("onConfigLoaded", e);
             if(e.resources.config.data){
                 let data:any = e.resources.config.data;
                 let configLoader:Loader = new Loader();
@@ -25,7 +26,7 @@ namespace utterlySuperb.inflatableDartboard.app.utils{
                         try{
                             configLoader.add("image_" + i, data.images[i]);
                         }catch(e){
-                            console.log("config image error", e)
+                            Logs.warn("config image error", e)
                         }
                     });
                 }
@@ -34,7 +35,7 @@ namespace utterlySuperb.inflatableDartboard.app.utils{
                         try{
                             configLoader.add("uiFiles_" + i, data.uiFiles[i]);
                         }catch(e){
-                            console.log("config ui error", e)
+                            Logs.warn("config ui error", e)
                         }
                     });
                 }
@@ -44,20 +45,28 @@ namespace utterlySuperb.inflatableDartboard.app.utils{
                         appLoader.addAsset(fontOb.path, fontOb.id, AssetType.font);
                     });                    
                 }
+                if(data.preloadAssets){
+                    _.forEach(data.preloadAssets, (imageToLoad:AssetToLoad)=>{
+                        configLoader.add(imageToLoad.reference, imageToLoad.path);
+                        if(imageToLoad.type==AssetType.image){
+                            TextureHelper.getInstance().setAsset(imageToLoad.reference, imageToLoad.path);
+                        }
+                    });
+                }
                 configLoader.load();
             }
         }
 
         private onConfigError():void{
-            console.log("onConfigError");
+            Logs.error("onConfigError");
         }
 
         private configFilesError(e:any):void{
-            console.log("configFilesError", e);
+            Logs.error("configFilesError", e);
         }
 
         private configFilesLoaded(e:Loader):void{
-            console.log("configFilesLoaded", e);
+            Logs.whisper("configFilesLoaded", e);
             let appLoader:AppLoader = AppLoader.getInstance();
             _.forEach(e.resources, (resourceData:any)=>{
                 if(resourceData.name.indexOf("image")!=-1){
@@ -73,19 +82,19 @@ namespace utterlySuperb.inflatableDartboard.app.utils{
                     }                      
                 }else if(resourceData.name.indexOf("uiFiles")!=-1){
                     if(resourceData.data.textStyles){
-                        let textHelper:TextHelper = TextHelper.getInstance();
+                        let textHelper:UIHelper = UIHelper.getInstance();
                         _.forEach(resourceData.data.textStyles, (textOb:any)=>{
                             textHelper.addTextObject(textOb);
                         });
                     }
                     if(resourceData.data.buttonDisplayers){
-                        let buttonHelper:ButtonHelper = ButtonHelper.getInstance();
+                        let buttonHelper:UIHelper = UIHelper.getInstance();
                         _.forEach(resourceData.data.buttonDisplayers, (displayerOb:any)=>{
                             buttonHelper.addDisplayerObject(displayerOb);
                         });
                     }
                     if(resourceData.data.buttons){
-                        let buttonHelper:ButtonHelper = ButtonHelper.getInstance();
+                        let buttonHelper:UIHelper = UIHelper.getInstance();
                         _.forEach(resourceData.data.buttons, (buttonOb:any)=>{
                             buttonHelper.addButtonObject(buttonOb);
                         });
@@ -98,7 +107,8 @@ namespace utterlySuperb.inflatableDartboard.app.utils{
                     }
                 }
             });
-            appLoader.configHasLoaded();
+            this.completeSignal.dispatch();
+            this.completeSignal.dispose();
         }
     }
 }

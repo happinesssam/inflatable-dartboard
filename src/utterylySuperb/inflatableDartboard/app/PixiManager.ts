@@ -1,6 +1,8 @@
 ///<reference path="utils/GlobalDispatcher.ts"/>
+///<reference path="model/AppEvents.ts"/>
 namespace utterlySuperb.inflatableDartboard.app{
     import AppSettings = utterlySuperb.inflatableDartboard.app.model.AppSettings;
+    import AppEvents = utterlySuperb.inflatableDartboard.app.model.AppEvents;
     import Container = PIXI.Container;
     import GlobalDispatcher = utterlySuperb.inflatableDartboard.app.utils.GlobalDispatcher;
     export class PixiManager{
@@ -12,7 +14,6 @@ namespace utterlySuperb.inflatableDartboard.app{
         private _cssWidth:number;
         private _cssHeight:number;
 
-        public static ON_RESIZE:string = "PixiManager.onResize";
 
         constructor(){
             this.stage = new Container();
@@ -89,7 +90,7 @@ namespace utterlySuperb.inflatableDartboard.app{
                 cssY = Math.round((windowHeight - cssHeight)/2);
                 break;
                 case AppSettings.BEST_FIT:
-                throw("TODO. this is a dumb mode anyway");
+                console.error("TODO. this is a dumb mode anyway");
                 break;
             }
             this.renderer.resize(rendererWidth, rendererHeight);
@@ -102,7 +103,7 @@ namespace utterlySuperb.inflatableDartboard.app{
             this._cssWidth = cssWidth;
             this._cssHeight = cssHeight;
 
-            GlobalDispatcher.getInstance().dispatch(PixiManager.ON_RESIZE, {rendererWidth:rendererWidth,
+            GlobalDispatcher.getInstance().dispatch(AppEvents.ON_RESIZE, {rendererWidth:rendererWidth,
                 rendererHeight:rendererHeight, cssWidth:cssWidth, cssHeight:cssHeight});
         }
 

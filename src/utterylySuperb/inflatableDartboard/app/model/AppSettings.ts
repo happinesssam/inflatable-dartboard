@@ -21,6 +21,26 @@ namespace utterlySuperb.inflatableDartboard.app.model{
             for(var i in options){
                 this[i] = options[i];
             }
+            if(!this.rendererMax){
+                if(!this.renderWidth || !this.renderHeight){
+                    if(this.rendererMin){
+                        this.renderWidth = this.rendererMin.x;
+                        this.renderHeight = this.rendererMin.y;
+                    }else {
+                        console.error("renderer needs to have dimensions");
+                        this.renderWidth = 800;
+                        this.renderHeight = 600;
+                    }
+                }
+                this.rendererMax = {x:this.renderWidth, y:this.renderHeight};
+            }
+            if(!this.rendererMin){
+                if(!this.renderWidth || !this.renderHeight){
+                    this.renderWidth = this.rendererMax.x;
+                    this.renderHeight = this.rendererMax.y;
+                }
+                this.rendererMin = {x:this.renderWidth, y:this.renderHeight};
+            }
             if(this.rendererMax.x<this.rendererMin.x || this.rendererMax.y<this.rendererMin.y){
                 throw("renderer min dimensions cannot be smaller than max dimensions")
             }

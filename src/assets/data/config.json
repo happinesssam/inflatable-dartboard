@@ -1,4 +1,7 @@
 {
+    "preloadAssets":[
+
+    ],
     "uiFiles":[
         "assets/data/ui.json"
     ],

@@ -1,6 +1,7 @@
 ///<reference path="..\text\TextField.ts"/>
 ///<reference path="..\text\TextHelper.ts"/>
 ///<reference path="..\..\utils\FunctionUtils.ts"/>
+///<reference path="..\..\app\utils\TextureHelper.ts"/>
 namespace utterlySuperb.inflatableDartboard.ui.button{
     import Container = PIXI.Container;
     import Sprite = PIXI.Sprite;
@@ -71,7 +72,7 @@ namespace utterlySuperb.inflatableDartboard.ui.button{
             if(config.displayers){
                 _.forEach(config.displayers, (displayerId:string)=>{
                     let classOb:any;
-                    let displayerConfig:ButtonDisplayOptions = ButtonHelper.getInstance().getDisplayer(displayerId);
+                    let displayerConfig:ButtonDisplayOptions = UIHelper.getInstance().getDisplayer(displayerId);
 
                     switch(displayerConfig.class){
                         case ButtonTextDisplayer.DISPLAY_ID:

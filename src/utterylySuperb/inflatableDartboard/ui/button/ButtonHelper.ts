@@ -1,13 +1,13 @@
 namespace utterlySuperb.inflatableDartboard.ui.button{
-    export class ButtonHelper{
-        private static _instance:ButtonHelper;
+    export class ButtonHelperz{
+        private static _instance:ButtonHelperz;
 
         private buttonDefs:_.Dictionary<ButtonConfigOptions> = {};
         private displayerDefs:_.Dictionary<ButtonDisplayOptions> = {};
 
-        public static getInstance():ButtonHelper{
-            if(!ButtonHelper._instance)ButtonHelper._instance = new ButtonHelper();
-            return ButtonHelper._instance;
+        public static getInstance():ButtonHelperz{
+            if(!ButtonHelperz._instance)ButtonHelperz._instance = new ButtonHelperz();
+            return ButtonHelperz._instance;
         }
 
         public addButtonObject(buttonOb:any):void{

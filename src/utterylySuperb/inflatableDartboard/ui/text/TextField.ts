@@ -15,7 +15,7 @@ namespace utterlySuperb.inflatableDartboard.ui.text{
             this.boxHeight = height;
             let style:TextStyle;
             if(typeof styleOptions=="string"){
-                styleOptions = TextHelper.getInstance().getTextOptions(styleOptions);
+                styleOptions = UIHelper.getInstance().getTextOptions(styleOptions);
                 style = new TextStyle(styleOptions);
             }else if(styleOptions instanceof TextStyle){
                 style = styleOptions;

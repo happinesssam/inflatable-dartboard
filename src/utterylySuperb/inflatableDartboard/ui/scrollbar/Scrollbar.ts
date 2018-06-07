@@ -4,7 +4,7 @@ namespace utterlySuperb.inflatableDartboard.ui{
     import Texture = PIXI.Texture;
     import ScrollbarConfig = utterlySuperb.inflatableDartboard.ui.interfaces.ScrollbarConfig;
     import Button = utterlySuperb.inflatableDartboard.ui.button.Button;
-    import ButtonHelper = utterlySuperb.inflatableDartboard.ui.button.ButtonHelper;
+    import UIHelper = utterlySuperb.inflatableDartboard.ui.UIHelper;
     import ButtonConfigOptions = utterlySuperb.inflatableDartboard.ui.button.ButtonConfigOptions;
     import TextureHelper = utterlySuperb.inflatableDartboard.app.utils.TextureHelper;
     import InteractionEvent = PIXI.interaction.InteractionEvent;
@@ -36,7 +36,7 @@ namespace utterlySuperb.inflatableDartboard.ui{
             }
             if(options.upButton){
                 if(typeof options.upButton == "string"){
-                    this.upButton = ButtonHelper.getInstance().getButton(options.upButton);
+                    this.upButton = UIHelper.getInstance().getButton(options.upButton);
                 }else{
                     this.upButton = new Button(options.upButton);
                 }
@@ -45,7 +45,7 @@ namespace utterlySuperb.inflatableDartboard.ui{
             }
             if(options.downButton){
                 if(typeof options.downButton == "string"){
-                    this.downButton = ButtonHelper.getInstance().getButton(options.downButton);
+                    this.downButton = UIHelper.getInstance().getButton(options.downButton);
                 }else{
                     this.downButton = new Button(options.downButton);
                 }
@@ -53,7 +53,7 @@ namespace utterlySuperb.inflatableDartboard.ui{
                 this.downButton.onUp.add(this.onStep.bind(this));
             }
             if(typeof options.scrollbar == "string"){
-                this.scrollbar = ButtonHelper.getInstance().getButton(options.scrollbar);
+                this.scrollbar = UIHelper.getInstance().getButton(options.scrollbar);
             }else{
                 this.scrollbar = new Button(options.scrollbar);
             }

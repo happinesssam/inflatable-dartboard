@@ -12,6 +12,7 @@ const server = require('gulp-webserver');
 
 const debug = settings.debug === true;
 
+
 if (debug) { console.log("=== DEBUG Environment ===") }
 else { console.log("=== RELEASE Environment ==="); }
 
@@ -81,6 +82,7 @@ gulp.src(settings.paths.srcLibs + "**")
     .pipe(gulp.dest(dest + settings.paths.tgtLibs));
 });
 
+
 gulp.task('server', function() {
     let folder = debug ? "build/debug" : "build/release";
     gulp.src(folder)	// <-- your app folder
@@ -90,4 +92,7 @@ gulp.task('server', function() {
       }));
   });
 
-gulp.task("default", ["compile", "copy", 'server']);
+
+
+//gulp.task("default", ["compile", "copy", 'server']);
+gulp.task("default", ["compile", "copy"]);

@@ -24,6 +24,7 @@ namespace utterlySuperb.inflatableDartboard.app.utils{
         }
 
         public addAsset(path:string, reference:string, type:AssetType, path2?:string):void{
+            Logs.whisper("Add asset to load", reference, path);
             this.assetsToLoad.push({path:path, reference:reference, type:type, path2:path2})
         }
 
@@ -44,6 +45,7 @@ namespace utterlySuperb.inflatableDartboard.app.utils{
         }
 
         private loadPixiAssets():void{
+            Logs.log("loadPixiAssets");
             let imagesToLoad:AssetToLoad[] = _.filter(this.assetsToLoad, {type:AssetType.image });
             if(imagesToLoad.length){
                 let loader:Loader = new Loader();
@@ -62,14 +64,16 @@ namespace utterlySuperb.inflatableDartboard.app.utils{
         }
         
         private pixiAssetsProgress(e):void{
-console.log("pixiAssetsProgress", e)
+            Logs.whisper("pixiAssetsProgress", e);
         }
 
         private pixiAssetsLoaded():void{
+            Logs.log("pixiAssetsLoaded")
             this.loadSounds();
         }
 
         private loadSounds():void{
+            Logs.log("loadSounds");
             let soundsToLoad:AssetToLoad[] = _.filter(this.assetsToLoad, {type:AssetType.sound});
             let audioSpritesToLoad:AssetToLoad[] = _.filter(this.assetsToLoad, {type:AssetType.audioSprite});
             if(soundsToLoad.length || audioSpritesToLoad.length){
@@ -80,10 +84,12 @@ console.log("pixiAssetsProgress", e)
         }
 
         private soundsLoaded():void{
+            Logs.log("soundsLoaded");
             this.loadFonts();
         }
 
         private loadFonts():void{
+            Logs.log("loadFonts");
             let fontsToLoad:AssetToLoad[] = _.filter(this.assetsToLoad, {type:AssetType.font});
             if(fontsToLoad.length>0){
                 let fontConfig:WebfontConfig = {active:this.fontsLoaded.bind(this), 
@@ -105,15 +111,16 @@ console.log("pixiAssetsProgress", e)
         }
 
         private fontsError():void{
-            console.error("Font load error:");
+            Logs.error("Font load error:");
         }
 
         private fontsLoaded():void{
+            Logs.log("fontsLoaded");
             this.loadedSignal.dispatch();
         }
     }
 
-    interface AssetToLoad{
+    export interface AssetToLoad{
         path:string;
         type:AssetType;
         reference:string;
