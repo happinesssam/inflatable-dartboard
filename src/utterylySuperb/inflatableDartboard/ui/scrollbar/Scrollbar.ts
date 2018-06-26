@@ -8,6 +8,7 @@ namespace utterlySuperb.inflatableDartboard.ui{
     import ButtonConfigOptions = utterlySuperb.inflatableDartboard.ui.button.ButtonConfigOptions;
     import TextureHelper = utterlySuperb.inflatableDartboard.app.utils.TextureHelper;
     import InteractionEvent = PIXI.interaction.InteractionEvent;
+    import PixiManager = utterlySuperb.inflatableDartboard.app.PixiManager;
     export class Scrollbar extends Container{
         private upButton:Button;
         private downButton:Button;
@@ -15,17 +16,23 @@ namespace utterlySuperb.inflatableDartboard.ui{
         private bg:Container;
         private _enable:boolean;
         private _progress:number;
-        private moveStep:number;
+        private moveStep:number = 0.1;
         private moveDist:number;
         private top:number = 0;
         private useInts:boolean;
         private range:number = 1;
         private scrollStartY:number;
         private scrolling:boolean;
+        private scrollbarRatio:number;
         private onScrollBound:()=>void;
+        private _height:number;
+        private options:ScrollbarConfig;
 
-        constructor(options:ScrollbarConfig){
+        public onChange:Signal = new Signal();
+
+        constructor(options:ScrollbarConfig, height:number=100, scrollbarRatio:number=0.3, progress:number = 0){
             super();
+            this.options = options;
             if(options.bg){
                 if(options.bg instanceof Texture){
                     this.bg = new Sprite(options.bg);
@@ -57,6 +64,9 @@ namespace utterlySuperb.inflatableDartboard.ui{
             }else{
                 this.scrollbar = new Button(options.scrollbar);
             }
+            this.scrollbarRatio = scrollbarRatio;
+            this.setDimensions(options.width, height);
+            this.progress = progress;
             this.scrollbar.onUp.add(this.stopScroll.bind(this));
             this.scrollbar.onDown.add(this.startScroll.bind(this));
             this.addChild(this.scrollbar);
@@ -105,7 +115,8 @@ namespace utterlySuperb.inflatableDartboard.ui{
             if(!this.scrolling){
                 PIXI.ticker.shared.add(this.onScrollBound);
                 this.scrolling = true;
-                this.scrollStartY = e.data.global.y;
+                this.scrollStartY = 
+                this.toLocal(PixiManager.getInstance().stageInteractionManager.mouse.global, this).y;
             }
         }
 
@@ -117,17 +128,52 @@ namespace utterlySuperb.inflatableDartboard.ui{
         }
 
         private onScroll():void{
-
+            let newMouseY:number =  
+            this.toLocal(PixiManager.getInstance().stageInteractionManager.mouse.global, this).y;
+            this.scrollbar.y += newMouseY - this.scrollStartY;
+            this.scrollStartY = newMouseY;
+            this.scrollbar.y  = Math.max(this.top, Math.min(this.top + this.moveDist, this.scrollbar.y));
+            this._progress = (this.scrollbar.y - this.top)/this.moveDist;
+            this.onChange.dispatch(this, this._progress);
         }
 
         private onStep(target:Button):void{
-
+            let step:number = this.moveStep;
+            if(target==this.upButton){
+                step*=-1;
+            }
+            this.progress+=step;
+            this.onChange.dispatch(this, this._progress);
         }
 
         public setDimensions(width:number, height:number):void{
             if(this.bg){
                 this.bg.width = width;
                 this.bg.height = height;
+            }
+            this._height = height;
+            this.setValues();
+        }
+
+        public setScrollbarRatio(scrollbarRatio:number):void{
+            this.scrollbarRatio = scrollbarRatio;
+            this.setValues();
+        }
+
+        private setValues():void{
+            this.moveDist = this._height;
+            this.top = 0;
+            if(this.upButton){
+                this.moveDist-=this.upButton.height;
+                this.top = this.upButton.height;
+            }
+            if(this.downButton){
+                this.moveDist-=this.downButton.height;
+                this.downButton.y = this._height - this.downButton.height;
+            }
+            if(this.scrollbar){
+                this.scrollbar.setDimensions(this.options.width, Math.floor(this.moveDist * this.scrollbarRatio));
+                this.moveDist-=this.scrollbar.height;
             }
         }
     }

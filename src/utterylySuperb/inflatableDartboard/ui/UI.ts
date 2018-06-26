@@ -9,6 +9,7 @@ namespace utterlySuperb.inflatableDartboard.ui
     import Widget = utterlySuperb.inflatableDartboard.ui.widgets.Widget;
     import WidgetDef = utterlySuperb.inflatableDartboard.ui.widgets.WidgetDef;
     import AppEvents = utterlySuperb.inflatableDartboard.app.model.AppEvents;
+    import Logs = utterlySuperb.inflatableDartboard.app.utils.Logs;
     /**
      * This is just the top layer container. It can is mostly for widgets
      */
@@ -48,7 +49,7 @@ namespace utterlySuperb.inflatableDartboard.ui
 
         public addWidget(widgetId:string):void{
             if(this.hasWidget(widgetId)){
-                console.warn("Attempt to create widget " + widgetId + " that already exists");
+                Logs.warn("Attempt to create widget " + widgetId + " that already exists");
                 return;
             }
             let widgetDef:WidgetDef = this.widgetDefs[widgetId];
@@ -56,8 +57,9 @@ namespace utterlySuperb.inflatableDartboard.ui
                 let widget:Widget = new widgetDef.content(widgetDef);
                 this.addChild(widget);
                 this.widgets.push(widget);
+                Logs.whisper("Added widget", widget);
             }else{
-                console.warn("Attempt to create widget " + widgetId + " that does not have def");
+                Logs.warn("Attempt to create widget " + widgetId + " that does not have def");
             }
         }
 
@@ -77,6 +79,7 @@ namespace utterlySuperb.inflatableDartboard.ui
             widget.remove(()=>{
                 widget.cleanUp();
                 this.removeChild(widget);
+                Logs.whisper("Removed widget", widget);
             });
         }
 

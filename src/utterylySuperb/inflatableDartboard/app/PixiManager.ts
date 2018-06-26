@@ -5,6 +5,8 @@ namespace utterlySuperb.inflatableDartboard.app{
     import AppEvents = utterlySuperb.inflatableDartboard.app.model.AppEvents;
     import Container = PIXI.Container;
     import GlobalDispatcher = utterlySuperb.inflatableDartboard.app.utils.GlobalDispatcher;
+    import Logs = utterlySuperb.inflatableDartboard.app.utils.Logs;
+    import InteractionManager = PIXI.interaction.InteractionManager;
     export class PixiManager{
         private static _instance:PixiManager;
         public container: HTMLElement;
@@ -90,7 +92,7 @@ namespace utterlySuperb.inflatableDartboard.app{
                 cssY = Math.round((windowHeight - cssHeight)/2);
                 break;
                 case AppSettings.BEST_FIT:
-                console.error("TODO. this is a dumb mode anyway");
+                Logs.error("TODO. this is a dumb mode anyway");
                 break;
             }
             this.renderer.resize(rendererWidth, rendererHeight);
@@ -138,6 +140,10 @@ namespace utterlySuperb.inflatableDartboard.app{
             if(this.running){
                 this.renderer.render(this.stage);
             }            
+        }
+
+        public get stageInteractionManager():InteractionManager{
+            return this.renderer.plugins.interaction;
         }
     }
 

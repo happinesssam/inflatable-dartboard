@@ -105,8 +105,8 @@ namespace utterlySuperb.inflatableDartboard.ui.button{
         public buttonDimensionChange():void{
             if(!this.ignoreButtonSize && !this.displayerOptions.noResize){
                 _.forEach(this.sprites, (graphic:Container)=>{
-                    graphic.width = this.button.width;
-                    graphic.height = this.button.height;
+                    graphic.width = this.button.buttonWidth;
+                    graphic.height = this.button.buttonHeight;
                 });
             }    
             this.placeGraphics();        

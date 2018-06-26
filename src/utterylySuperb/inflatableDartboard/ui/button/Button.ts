@@ -16,6 +16,7 @@ namespace utterlySuperb.inflatableDartboard.ui.button{
     export class Button extends Container{
 
         public onUp:Signal = new Signal();
+        public onClick:Signal = new Signal();
         public onDown:Signal = new Signal();
         public onOver:Signal = new Signal();
         public onOut:Signal = new Signal();
@@ -35,6 +36,8 @@ namespace utterlySuperb.inflatableDartboard.ui.button{
         protected mouseIsOver:boolean;
         private _buttonWidth:number = 100;
         private _buttonHeight:number = 100;
+        private pressStart:number;
+        public clickTime:number = -1;
         public static NUM_STATES:number = 7;//+all
 
         constructor(config:ButtonConfigOptions, copy:string=""){
@@ -193,11 +196,15 @@ namespace utterlySuperb.inflatableDartboard.ui.button{
         private onButtonDown(e:InteractionEvent):void{
             this.displayDown();
             this.onDown.dispatch(this, e);
+            this.pressStart = Date.now();
         }        
 
         private onButtonUp(e:InteractionEvent):void{
             this.displayUp();          
             this.onUp.dispatch(this, e);
+            if(this.clickTime<0 || Date.now()-this.pressStart<this.clickTime){
+                this.onClick.dispatch(this, e);
+            }
         }
 
         private onButtonOver(e:InteractionEvent):void{

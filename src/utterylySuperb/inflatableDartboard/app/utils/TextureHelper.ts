@@ -1,8 +1,10 @@
+///<reference path="Logs.ts"/>
 namespace utterlySuperb.inflatableDartboard.app.utils{
     import Container = PIXI.Container;
     import Sprite = PIXI.Sprite;
     import Texture = PIXI.Texture;
     import NineSlicePlane = PIXI.mesh.NineSlicePlane;
+    import Logs = utterlySuperb.inflatableDartboard.app.utils.Logs;
     export class TextureHelper{
         private assetMap:_.Dictionary<string> = {};
         private nineSlices:_.Dictionary<NineSliceDef> = {};
@@ -14,7 +16,7 @@ namespace utterlySuperb.inflatableDartboard.app.utils{
         }
 
         public getAssetURl(id:string):string{
-            console.log("getAssetURl", id, this.assetMap)
+            Logs.whisper("getAssetURl", id, this.assetMap)
             if(this.assetMap[id]){
                 return this.assetMap[id];
             }
@@ -23,7 +25,7 @@ namespace utterlySuperb.inflatableDartboard.app.utils{
 
         public setAsset(id:string, url:string):void{
             if(this.assetMap[id]&& url!=this.assetMap[id]){
-                console.error("Mapped asset twice:" + id);
+                Logs.warn("Mapped asset twice:" + id);
             }
             this.assetMap[id] = url;
         }

@@ -1,5 +1,7 @@
+///<reference path="../utils/Logs.ts"/>
 namespace utterlySuperb.inflatableDartboard.app.model{
     import IPoint = utterlySuperb.inflatableDartboard.utils.interfaces.IPoint;
+    import Logs = utterlySuperb.inflatableDartboard.app.utils.Logs;
     export class AppSettings{
         public renderWidth:number = 800;
         public renderHeight:number = 600;
@@ -21,13 +23,16 @@ namespace utterlySuperb.inflatableDartboard.app.model{
             for(var i in options){
                 this[i] = options[i];
             }
+            if(!_.isUndefined(options.logSettings)){
+                Logs.initLog(options.logSettings);
+            }
             if(!this.rendererMax){
                 if(!this.renderWidth || !this.renderHeight){
                     if(this.rendererMin){
                         this.renderWidth = this.rendererMin.x;
                         this.renderHeight = this.rendererMin.y;
                     }else {
-                        console.error("renderer needs to have dimensions");
+                        Logs.warn("renderer needs to have dimensions");
                         this.renderWidth = 800;
                         this.renderHeight = 600;
                     }

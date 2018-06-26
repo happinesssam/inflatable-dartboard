@@ -81,22 +81,25 @@ namespace utterlySuperb.inflatableDartboard.app.utils{
                         })
                     }                      
                 }else if(resourceData.name.indexOf("uiFiles")!=-1){
+                    let uiHelper:UIHelper = UIHelper.getInstance();
                     if(resourceData.data.textStyles){
-                        let textHelper:UIHelper = UIHelper.getInstance();
                         _.forEach(resourceData.data.textStyles, (textOb:any)=>{
-                            textHelper.addTextObject(textOb);
+                            uiHelper.addTextObject(textOb);
                         });
                     }
                     if(resourceData.data.buttonDisplayers){
-                        let buttonHelper:UIHelper = UIHelper.getInstance();
                         _.forEach(resourceData.data.buttonDisplayers, (displayerOb:any)=>{
-                            buttonHelper.addDisplayerObject(displayerOb);
+                            uiHelper.addDisplayerObject(displayerOb);
                         });
                     }
                     if(resourceData.data.buttons){
-                        let buttonHelper:UIHelper = UIHelper.getInstance();
-                        _.forEach(resourceData.data.buttons, (buttonOb:any)=>{
-                            buttonHelper.addButtonObject(buttonOb);
+                          _.forEach(resourceData.data.buttons, (buttonOb:any)=>{
+                            uiHelper.addButtonObject(buttonOb);
+                        });
+                    }
+                    if(resourceData.data.misc){                        
+                        _.forEach(resourceData.data.misc, (miscOb:any)=>{
+                            uiHelper.addMiscOb(miscOb);
                         });
                     }
                     if(resourceData.data.nineSlices){

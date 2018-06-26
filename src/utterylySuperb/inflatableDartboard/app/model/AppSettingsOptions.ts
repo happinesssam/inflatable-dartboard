@@ -10,5 +10,6 @@ namespace utterlySuperb.inflatableDartboard.app.model{
         antialias?:boolean;
         containerId?:string;
         configPath?:string;
+        logSettings?:boolean | boolean[];
     }
 }

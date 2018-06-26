@@ -9,5 +9,11 @@ namespace utterlySuperb.inflatableDartboard.ui.widgets{
         public onPixel:boolean;
         public depth:number = 0;
         public content:any;
+        constructor(id:string, content:any, align:string="c", offset:IPoint = null){
+            this.id = id;
+            this.content = content;
+            this.align = align;
+            this.offset = offset;
+        }
     }
 }

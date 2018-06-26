@@ -10,6 +10,25 @@
                 "button0Graphics",
                 "button0Icon"
             ]
+        },
+        {
+            "id":"scrollButton",
+            "width":50,
+            "height":50,
+            "hitArea":"button0Up",
+            "displayers":[
+                "button0Graphics",
+                "button0Icon"
+            ]
+        },
+        {
+            "id":"scrollBar",
+            "width":50,
+            "height":50,
+            "hitArea":"button0Up",
+            "displayers":[
+                "button0Graphics"
+            ]
         }
     ],
     "buttonDisplayers":[
@@ -77,6 +96,15 @@
             "right":10,
             "top":10,
             "bottom":10
+        }
+    ],
+    "misc":[
+        {
+            "id":"scrollbar0",
+            "width":50,
+            "scrollbar":"scrollBar",
+            "upButton":"scrollButton",
+            "downButton":"scrollButton"
         }
     ]
 }

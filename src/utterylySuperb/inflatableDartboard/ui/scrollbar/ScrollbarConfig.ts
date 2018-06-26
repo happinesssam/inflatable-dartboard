@@ -8,7 +8,6 @@ namespace utterlySuperb.inflatableDartboard.ui.interfaces{
         scrollbar:ButtonConfigOptions | string;
         bg?:Texture | string;
         width:number;
-        height:number;
         step:number;
         buttonsHeight?:number;
     }

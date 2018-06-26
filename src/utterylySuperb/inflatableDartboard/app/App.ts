@@ -2,6 +2,7 @@
 ///<reference path="model\AppSettings.ts"/>
 ///<reference path="model\Page.ts"/>
 ///<reference path="model\PageDef.ts"/>
+///<reference path="model\AppHistory.ts"/>
 ///<reference path="utils\AppLoader.ts"/>
 ///<reference path="utils\ConfigLoader.ts"/>
 ///<reference path="utils\Logs.ts"/>
@@ -24,6 +25,8 @@ namespace utterlySuperb.inflatableDartboard.app{
     import AppEvents = utterlySuperb.inflatableDartboard.app.model.AppEvents;
     import Background = utterlySuperb.inflatableDartboard.background.Background;
     import Logs = utterlySuperb.inflatableDartboard.app.utils.Logs;
+    import AppHistory = utterlySuperb.inflatableDartboard.app.model.AppHistory;
+    import WidgetDef = utterlySuperb.inflatableDartboard.ui.widgets.WidgetDef;
     export class App{
         public settings:AppSettings;
         private static _instance:App;
@@ -38,8 +41,10 @@ namespace utterlySuperb.inflatableDartboard.app{
             Logs.shout("~~~APP STARTED~~~");
             App._instance = this;
             GlobalDispatcher.getInstance().add(AppEvents.SWITCH_PAGE, this.loadPage.bind(this));
+            GlobalDispatcher.getInstance().add(AppEvents.GO_BACK, this.goBack.bind(this));
             this.settings = new AppSettings(options);
             this.addPageDefs();
+            this.addWidgetDefs();
             this.initPixi();
             this.loadConfig();
         }
@@ -75,23 +80,35 @@ namespace utterlySuperb.inflatableDartboard.app{
                      
         }
 
-        private loadPage(pageId:string):void{
+        private loadPage(pageId:string, fromBack:boolean = false):void{
             Logs.log("Load page:", pageId);
+            if(this.nextPage){
+                Logs.warn("Load page failed - switch already in process:", pageId, this.nextPage);
+                return;
+            }
+            let nextPageDef:PageDef = _.find(this.pages, {id:pageId});
+            if(!nextPageDef){
+                Logs.error("Load page failed - page not defined:", pageId);
+                return;
+            }
             if(this.currentPage){
                 if(this.currentPage.def.id==pageId){
                     return;
                 }else{
-                    if(this.nextPage){
-                        this.nextPage = pageId;
-                    }else{
-                        this.nextPage = pageId;
-                        this.currentPage.close(this.addNextPage.bind(this), this.removeOldPage.bind(this));
+                    this.nextPage = pageId;
+                    if(!fromBack){
+                        AppHistory.addToHistory(this.currentPage.def.id);
                     }
+                    this.currentPage.close(this.addNextPage.bind(this), this.removeOldPage.bind(this));
                 }
             }else{
                 this.nextPage = pageId;
                 this.addNextPage();
             }
+        }
+
+        private goBack(pageId:string):void{
+            this.loadPage(pageId, true);
         }
 
         private addNextPage():void{
@@ -120,7 +137,12 @@ namespace utterlySuperb.inflatableDartboard.app{
 
         protected appReady():void{
             let initialState:PageDef = _.find(this.pages, {initialState:true});
+            GlobalDispatcher.getInstance().add(AppEvents.ON_RESIZE, this.onResize.bind(this));
             if(initialState)this.loadPage(initialState.id);
+        }
+
+        private onResize(resizeInfo:SizeInfo=null):void{
+            this.currentPage.mainContent.onResize(resizeInfo);
         }
 
         
@@ -145,6 +167,14 @@ namespace utterlySuperb.inflatableDartboard.app{
 
         protected addPageDef(id:string, mainContent:any, widgets:string[] = [], background:string = "", initialState:boolean = false):void{
             this.pages.push(new PageDef(id, mainContent, widgets, background, initialState));
+        }
+
+        protected addWidgetDefs():void{
+
+        }
+
+        protected addWidgetDef(widgetDef:WidgetDef):void{
+            UI.getInstance().addWidgetDef(widgetDef);
         }
     }
 }

@@ -1,15 +1,16 @@
 namespace utterlySuperb.inflatableDartboard.app.utils{
     export class Logs{
-        public static OFF:number = 0;
-        public static ERRORS:number = 1;
-        public static SHOUT:number = 2;
-        public static WARNINGS:number = 3;
-        public static LOGS:number = 4;
-        public static ALL:number = 5;
-
-        private static _logLevel:number = Logs.LOGS;
-
         private static logsStatus:boolean[] = [true, true, true, true, true];
+
+        public static initLog(initOb:boolean | boolean[]):void{
+            if(typeof initOb=="boolean"){
+                Logs.setLogLevel(LogLevel.all, initOb);
+            }else{
+                _.times(Logs.logsStatus.length, (i:number)=>{
+                    if(i<initOb.length)Logs.logsStatus[i] = initOb[i];
+                })
+            }            
+        }
 
         public static setLogLevel(logtype:LogLevel, enabled:boolean){
             if(logtype==LogLevel.all){
@@ -19,7 +20,6 @@ namespace utterlySuperb.inflatableDartboard.app.utils{
                 Logs.logsStatus[LogLevel.log] = enabled;
             }
         }
-
 
         public static log(...params:any[]):void{
             if(Logs.logsStatus[LogLevel.log]){

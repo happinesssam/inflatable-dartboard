@@ -6,7 +6,6 @@ namespace utterlySuperb.inflatableDartboard.ui.widgets{
     import SizeInfo = utterlySuperb.inflatableDartboard.app.SizeInfo;
     import GlobalDispatcher = utterlySuperb.inflatableDartboard.app.utils.GlobalDispatcher;
     export class Widget extends Container{
-        public id:string;        
         public def:WidgetDef;
         private onResizeBound:()=>void;
         private hasOwnResizeHandler:boolean;
@@ -21,6 +20,10 @@ namespace utterlySuperb.inflatableDartboard.ui.widgets{
 
         protected init():void{
 
+        }
+
+        public get id():string{
+            return this.def.id;
         }
 
         /**
@@ -82,6 +85,11 @@ namespace utterlySuperb.inflatableDartboard.ui.widgets{
                 this.x = Math.floor(this.x);
                 this.y = Math.floor(this.y);
             }
+            this.postResize(resizeInfo);
+        }
+
+        protected postResize(resizeInfo:SizeInfo):void{
+
         }
     }
 }

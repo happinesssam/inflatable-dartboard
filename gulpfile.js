@@ -94,5 +94,5 @@ gulp.task('server', function() {
 
 
 
-//gulp.task("default", ["compile", "copy", 'server']);
+gulp.task("test", ["compile", "copy", 'server']);
 gulp.task("default", ["compile", "copy"]);
