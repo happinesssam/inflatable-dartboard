@@ -10,5 +10,7 @@ namespace utterlySuperb.inflatableDartboard.ui.interfaces{
         width:number;
         step:number;
         buttonsHeight?:number;
+        flipUpIcon?:boolean;
+        flipDownIcon?:boolean;
     }
 }

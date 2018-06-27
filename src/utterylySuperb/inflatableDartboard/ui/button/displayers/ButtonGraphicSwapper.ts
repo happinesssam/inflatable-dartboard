@@ -22,6 +22,10 @@ namespace utterlySuperb.inflatableDartboard.ui.button{
             return this._displayerOptions as ButtonDisplayOptionsGraphicsSwapper
         }
 
+        public get type():string{
+            return ButtonGraphicSwapper.DISPLAY_ID;
+        }
+
         public init(button:Button, displayerOptions:ButtonDisplayOptions):void{
             super.init(button, displayerOptions);
 
@@ -123,7 +127,11 @@ namespace utterlySuperb.inflatableDartboard.ui.button{
         }
 
         protected placeGraphics():void{
-            this.placeItemByAlign(this.statesPosition, this.defaultState.obj.width, this.defaultState.obj.height);
+            if(this.displayerOptions.centreAnchor){
+                this.placeCenteredItemByAlign(this.statesPosition, this.defaultState.obj.width, this.defaultState.obj.height);            
+            }else{
+                this.placeItemByAlign(this.statesPosition, this.defaultState.obj.width, this.defaultState.obj.height);            
+            }
             //sorry, all state have to have the same height and width
             this.applyState(this.getStateInfo(this.button.currentState));
         }
@@ -143,6 +151,11 @@ namespace utterlySuperb.inflatableDartboard.ui.button{
                     this.changeImage(newGraphic, state);
                 });
             }
+        }
+
+        public flipImage(flipX:boolean, flipY:boolean):void{
+            this.holder.scale.x = flipX ? -1 : 1;
+            this.holder.scale.y = flipY ? -1 : 1;
         }
         
         public changeImage(newGraphic:Container | string, state:ButtonState=ButtonState.up, offset:Point = null):void{

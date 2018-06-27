@@ -1,3 +1,4 @@
+///<reference path="../button/displayers/ButtonIconDisplayer.ts"/>
 namespace utterlySuperb.inflatableDartboard.ui{
     import Container = PIXI.Container;
     import Sprite = PIXI.Sprite;
@@ -6,6 +7,7 @@ namespace utterlySuperb.inflatableDartboard.ui{
     import Button = utterlySuperb.inflatableDartboard.ui.button.Button;
     import UIHelper = utterlySuperb.inflatableDartboard.ui.UIHelper;
     import ButtonConfigOptions = utterlySuperb.inflatableDartboard.ui.button.ButtonConfigOptions;
+    import ButtonIconDisplayer = utterlySuperb.inflatableDartboard.ui.button.ButtonIconDisplayer;
     import TextureHelper = utterlySuperb.inflatableDartboard.app.utils.TextureHelper;
     import InteractionEvent = PIXI.interaction.InteractionEvent;
     import PixiManager = utterlySuperb.inflatableDartboard.app.PixiManager;
@@ -39,6 +41,7 @@ namespace utterlySuperb.inflatableDartboard.ui{
                 }else{
                     this.bg = TextureHelper.getInstance().getAsset(options.bg);
                 }
+                this.bg.on('pointerup', this.onBgClick.bind(this))
                 this.addChild(this.bg);
             }
             if(options.upButton){
@@ -49,6 +52,10 @@ namespace utterlySuperb.inflatableDartboard.ui{
                 }
                 this.addChild(this.upButton);
                 this.upButton.onUp.add(this.onStep.bind(this));
+                if(options.flipUpIcon){
+                    let icon:ButtonIconDisplayer = this.upButton.getDisplayerByType(ButtonIconDisplayer.DISPLAY_ID) as ButtonIconDisplayer;
+                    if(icon)icon.flipImage(false, true);
+                }
             }
             if(options.downButton){
                 if(typeof options.downButton == "string"){
@@ -58,12 +65,18 @@ namespace utterlySuperb.inflatableDartboard.ui{
                 }
                 this.addChild(this.downButton);
                 this.downButton.onUp.add(this.onStep.bind(this));
+                if(options.flipDownIcon){
+                    let icon:ButtonIconDisplayer = this.downButton.getDisplayerByType(ButtonIconDisplayer.DISPLAY_ID) as ButtonIconDisplayer;
+                    if(icon)icon.flipImage(false, true);
+                    console.log("trye flip", icon)
+                }
             }
             if(typeof options.scrollbar == "string"){
                 this.scrollbar = UIHelper.getInstance().getButton(options.scrollbar);
             }else{
                 this.scrollbar = new Button(options.scrollbar);
             }
+            if(_.isNumber(options.step))this.moveStep = options.step;
             this.scrollbarRatio = scrollbarRatio;
             this.setDimensions(options.width, height);
             this.progress = progress;
@@ -137,12 +150,22 @@ namespace utterlySuperb.inflatableDartboard.ui{
             this.onChange.dispatch(this, this._progress);
         }
 
-        private onStep(target:Button):void{
-            let step:number = this.moveStep;
-            if(target==this.upButton){
-                step*=-1;
+        private onBgClick(e:InteractionEvent):void{
+            let mouseY:number =  
+            this.toLocal(e.data.global, this).y;
+            if(mouseY<this.scrollbar.y){
+                this.doStep(-2);
+            }else if(mouseY>this.scrollbar.y){
+                this.doStep(2);
             }
-            this.progress+=step;
+        }
+
+        private onStep(target:Button):void{
+            this.doStep(target==this.upButton ? -1 : 1);
+        }
+        
+        private doStep(direction:number):void{
+            this.progress+=this.moveStep * direction;
             this.onChange.dispatch(this, this._progress);
         }
 

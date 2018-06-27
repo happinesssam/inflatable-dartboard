@@ -18,7 +18,7 @@
             "hitArea":"button0Up",
             "displayers":[
                 "button0Graphics",
-                "button0Icon"
+                "scrollButtonArrow"
             ]
         },
         {
@@ -38,14 +38,14 @@
             "upGraphic":"button0Up",
             "overGraphic":"button0Over",
             "downGraphic":"button0Down",
-            "downOffset":{"x":0, "y":5}
+            "downOffset":{"x":0, "y":0}
         },
         {
             "id":"button0Text",
             "class":"TextDisplayer",
             "upTextStyle":"buttonText0",
             "overTextStyle":"buttonText0Over",
-            "downOffset":{"x":0, "y":10}
+            "downOffset":{"x":0, "y":0}
         },
         {
             "id":"button0Icon",
@@ -58,7 +58,20 @@
             "offsetY":7,
             "flipY":true,
             "centreAnchor":true,
-            "downOffset":{"x":0, "y":10}
+            "downOffset":{"x":0, "y":0}
+        },
+        {
+            "id":"scrollButtonArrow",
+            "class":"IconSwapper",
+            "upGraphic":"arrowUpWhite",
+            "align":"c",
+            "width":15,
+            "height":15,
+            "offsetX":0,
+            "offsetY":-4,
+            "flipY":false,
+            "centreAnchor":true,
+            "downOffset":{"x":0, "y":0}
         }
     ],
     "textStyles":[
@@ -96,6 +109,13 @@
             "right":10,
             "top":10,
             "bottom":10
+        },{
+            "id":"scrollbarBg",
+            "texture":"scrollbarBg",
+            "left":10,
+            "right":10,
+            "top":10,
+            "bottom":10
         }
     ],
     "misc":[
@@ -104,7 +124,9 @@
             "width":50,
             "scrollbar":"scrollBar",
             "upButton":"scrollButton",
-            "downButton":"scrollButton"
+            "downButton":"scrollButton",
+            "flipDownIcon":true,
+            "bg":"scrollbarBg"
         }
     ]
 }

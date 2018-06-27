@@ -193,6 +193,10 @@ namespace utterlySuperb.inflatableDartboard.ui.button{
             return _.find(this.displayers, {id:id});
         }
 
+        public getDisplayerByType(type:string):IButtonDisplay{
+            return _.find(this.displayers, {type:type});
+        }
+
         private onButtonDown(e:InteractionEvent):void{
             this.displayDown();
             this.onDown.dispatch(this, e);

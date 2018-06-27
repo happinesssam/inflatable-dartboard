@@ -1,5 +1,6 @@
 ///<reference path="../app/utils/GlobalDispatcher.ts"/>
 ///<reference path="../app/PixiManager.ts"/>
+
 namespace utterlySuperb.inflatableDartboard.ui
 {
     import Container = PIXI.Container;

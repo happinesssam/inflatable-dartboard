@@ -15,6 +15,10 @@ namespace utterlySuperb.inflatableDartboard.ui.button{
 
         public static DISPLAY_ID:string = "TextDisplayer";
 
+        public get type():string{
+            return ButtonTextDisplayer.DISPLAY_ID;
+        }
+
 
         public init(button:Button, displayerOptions:ButtonDisplayOptions):void{
             super.init(button, displayerOptions);

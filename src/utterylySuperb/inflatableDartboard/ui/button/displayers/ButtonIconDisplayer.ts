@@ -8,5 +8,9 @@ namespace utterlySuperb.inflatableDartboard.ui.button{
         protected addContainer():void{
             this.button.textHolder.addChild(this.holder);
         }
+
+        public get type():string{
+            return ButtonIconDisplayer.DISPLAY_ID;
+        }
     }
 }

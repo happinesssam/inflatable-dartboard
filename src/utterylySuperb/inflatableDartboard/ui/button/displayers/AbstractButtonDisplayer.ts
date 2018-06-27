@@ -21,6 +21,10 @@ namespace utterlySuperb.inflatableDartboard.ui.button{
             return this._displayerOptions.id;
         }
 
+        public get type():string{
+            return "";
+        }
+
         public init(button:Button, displayerOptions:ButtonDisplayOptions):void{
             this._button = button;
             this._displayerOptions = displayerOptions;  
@@ -80,6 +84,38 @@ namespace utterlySuperb.inflatableDartboard.ui.button{
                 }
             }else{
                 item.x = (this.button.buttonWidth- width)/2;
+            }
+            if(this._displayerOptions.offsetX)item.x+=this._displayerOptions.offsetX;
+            if(this._displayerOptions.offsetY)item.y+=this._displayerOptions.offsetY;
+        }
+        
+        protected placeCenteredItemByAlign(item:IPoint, width:number, height:number):void{
+            let align:string = this._displayerOptions.align || "c";
+            switch(align.charAt(0)){
+                case "t":
+                item.y = 0 + height/2;
+                break;
+                case "b":
+                item.y =  this.button.buttonHeight - height/2;
+                break;
+                default:
+                item.y = this.button.buttonHeight/2;
+                break;
+            }
+            if(align.length==2){
+                switch(align.charAt(1)){
+                    case "l":
+                    item.x = 0 + width/2;
+                    break;
+                    case "r":
+                    item.x = this.button.buttonWidth - width/2;
+                    break;
+                    default:
+                    item.x = this.button.buttonWidth/2;
+                    break;
+                }
+            }else{
+                item.x = this.button.buttonWidth/2;
             }
             if(this._displayerOptions.offsetX)item.x+=this._displayerOptions.offsetX;
             if(this._displayerOptions.offsetY)item.y+=this._displayerOptions.offsetY;
